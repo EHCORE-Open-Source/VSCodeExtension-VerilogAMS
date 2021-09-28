@@ -1,0 +1,61 @@
+{
+    "name": "verilogams-support-package",
+    "displayName": "Synopsys Verilog-AMS Package",
+    "description": "Synopsys Verilog-AMS Support",
+    "version": "0.0.1",
+    "publisher": "itri-ehcore",
+    "private": true,
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EHCORE-Open-Source/vscode_syns_verilogams.git"
+    },
+    "engines": {
+        "vscode": "^1.43.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "verilog-ams",
+                "aliases": [
+                    "Verilog-AMS",
+                    "verilog-ams"
+                ],
+                "extensions": [
+                    ".vams"
+                ],
+                "configuration": "./verilog-ams.language-configuration.json"
+            },
+            {
+                "id": "verilog-a",
+                "aliases": [
+                    "Verilog-A",
+                    "verilog-a"
+                ],
+                "extensions": [
+                    ".va"
+                ],
+                "configuration": "./verilog-a.language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "verilog-ams",
+                "scopeName": "source.vams",
+                "path": "./syntaxes/verilog-ams.tmLanguage.json"
+            },
+            {
+                "language": "verilog-a",
+                "scopeName": "source.va",
+                "path": "./syntaxes/verilog-a.tmLanguage.json"
+            }
+        ]
+    },
+    "dependencies": {
+        "@types/node": "^16.9.1",
+        "@types/vscode": "^1.60.0"
+    }
+}

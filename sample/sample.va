@@ -1,0 +1,60 @@
+module va_amp(in, out);
+parameter real gain = 1.0;
+electrical in, out;
+analog begin
+V(out) <+ gain * V(in);
+end
+endmodule
+
+
+/* 
+ this is a comment
+*/
+// this is also a comment
+
+-1.2 
+0.1 
+2394.26331 
+1.2E12    // the exponent symbol can be e or E 
+1.30e-2 
+0.1e-0 
+23E10 
+29E-2 
+236.123_763_e-12 // underscores are ignored
+1.3u 
+7k 
+
+connect
+
+"\\stri\n\tngsri\nng\'\"str\\in\\\gas\ttt\?ri\177n\077g";
+"string"
+'string'
+access
+
+module comparator(cout, inp, inm);
+reg a;
+access 
+	output cout;
+	input inp, inm;
+	electrical cout, inp, inm;
+	parameter real td = 1n, tr = 1n, tf = 1n;
+	real vcout;
+	analog begin
+		@(cross(V(inp) - V(inm), 0))
+			vcout = ((V(inp) > V(inm)) ? 1 : 0);
+		V(cout) <+ transition(vcout, td, tr, tf);
+	end
+endmodule
+
+module
+endmodule
+
+config
+
+endconfig
+.dc v1 0 5 0.1
+.end
+
+// #region
+
+// #endregion
