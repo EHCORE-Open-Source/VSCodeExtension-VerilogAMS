@@ -24,9 +24,11 @@ endmodule
 1.3u 
 7k 
 
+6.m
+
 connect
 
-"\\\\stri\n\tngsri\nng\'\"str\\in\\\gas\tttri\177n\077g";
+"\\\\stri\n\tngsri\nng\'\"str\\in\\\gas\tttri\177n\077g\326";
 "string"
 
 'string'

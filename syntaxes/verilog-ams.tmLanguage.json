@@ -45,17 +45,12 @@
         },
         "numeric": {
             "patterns": [
-            {
-                "comment": "numeric for scientific notation",
-                "name": "constant.numeric.vams",
-                "match": "([+-]?[0-9_]+[.]?[0-9_]*[eE][+-]?[0-9_]+($|\\s+))"
-            },
-            {
-                "comment": "numeric for floating-point number",
-                "name": "constant.numeric.vams",
-                "match": "([+-]?[0-9_]+[.]?[0-9_]*[TGMKkmunpfa]?($|\\s+))"
-            }
-        ]
+                {
+                    "comment": "numeric for scientific notation",
+                    "name": "constant.numeric.va",
+                    "match": "([+-]?[0-9_]+([.][0-9_]+)?([eE][+-]?[0-9_]+|[TGMKkmunpfa])?($|\\s+))"
+                }
+            ]
         },
         "strings": {
             "patterns": [
@@ -67,7 +62,7 @@
 		            "patterns": [
                         {
                             "name": "constant.character.escape.va",
-                            "match": "\\\\([nt\\x5C\\x22]|[0-1]?[0-7]?[0-7])"
+                            "match": "\\\\([nt\\x5C\\x22]|[0-1]?[0-7]{1,2})"
                         }
                     ]
                      	
