@@ -36,16 +36,16 @@ access ;
 module comparator(cout, inp, inm);
 reg a;
 access 
-	output cout;
-	input inp, inm;
-	electrical cout, inp, inm;
-	parameter real td = 1n, tr = 1n, tf = 1n;
-	real vcout;
-	analog begin
-		@(cross(V(inp) - V(inm), 0))
-			vcout = ((V(inp) > V(inm)) ? 1 : 0);
-		V(cout) <+ transition(vcout, td, tr, tf);
-	end
+    output cout;
+    input inp, inm;
+    electrical cout, inp, inm;
+    parameter real td = 1n, tr = 1n, tf = 1n;
+    real vcout;
+    analog begin
+        @(cross(V(inp) - V(inm), 0))
+            vcout = ((V(inp) > V(inm)) ? 1 : 0);
+        V(cout) <+ transition(vcout, td, tr, tf);
+    end
 endmodule
 
 module
@@ -54,8 +54,6 @@ endmodule
 config
 
 endconfig
-.dc v1 0 5 0.1
-.end
 
 // #region
 
