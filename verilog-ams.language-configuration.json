@@ -37,9 +37,5 @@
             "start": "[//]\\s?#region",
             "end": "[//]\\s?#endregion"
         },
-    },
-    "indentationRules": {
-        "increaseIndentPattern": "^((?!\\/\\/).)*(\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",
-        "decreaseIndentPattern": "^((?!.*?\\/\\*).*\\*/)?\\s*[\\)\\}\\]].*$"
     }
 }
