@@ -35,6 +35,6 @@
         "markers": {
             "start": "[//]\\s?#region",
             "end": "[//]\\s?#endregion"
-        },
+        }
     }
 }
