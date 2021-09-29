@@ -1,18 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "name": "verilog-ams",
-    "injections": {
-        "R:source.vams": {
-            "comment": "Uses R: to ensure this matches after any other injections.",
-            "patterns": [
-                {
-                    "comment": "invalid commands",
-                    "match": "^[.].*",
-                    "name": "invalid.illegal.vams"
-                }
-            ]
-        }
-    },
     "patterns": [
         {
             "include": "#strings"
