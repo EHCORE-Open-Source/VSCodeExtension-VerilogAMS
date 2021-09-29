@@ -1,43 +1,38 @@
 {
     "comments": {
-        // symbol used for single line comment. Remove this entry if your language does not support line comments
         "lineComment": "//",
         "blockComment": [ "/*", "*/" ]
     },
-    // symbols used as brackets
     "brackets": [
-        ["(", ")"],
-        ["[", "]"],
-        ["{", "}"],
-        ["begin","end"],
-        ["case","endcase"],
-        ["config","endconfig"],
-        ["discipline","enddiscipline"],
-        ["function","endfunction"],
-        ["generate","endgenerate"],
-        ["module","endmodule"],
-        ["nature","endnature"],
-        ["paramset","endparamset"],
-        ["primitive","endprimitive"],
-        ["specify","endspecify"],
-        ["table","endtable"],
-        ["task","endtask"]
+        [ "(", ")" ],
+        [ "[ ", " ]" ],
+        [ "{", "}" ],
+        [ "begin", "end" ],
+        [ "case", "endcase" ],
+        [ "config", "endconfig" ],
+        [ "discipline", "enddiscipline" ],
+        [ "function", "endfunction" ],
+        [ "generate", "endgenerate" ],
+        [ "module", "endmodule" ],
+        [ "nature", "endnature" ],
+        [ "paramset", "endparamset" ],
+        [ "primitive", "endprimitive" ],
+        [ "specify", "endspecify" ],
+        [ "table", "endtable" ],
+        [ "task", "endtask" ]
     ],
-    // symbols that are auto closed when typing
     "autoClosingPairs": [
-        { "open": "(", "close": ")" },
-        { "open": "[", "close": "]" },
-        { "open": "{", "close": "}"}
-        
+        { "open": "(", "close": ")", "notIn": [ "comment", "string" ] },
+        { "open": "[ ", "close": " ]", "notIn": [ "comment", "string" ] },
+        { "open": "{", "close": "}", "notIn": [ "comment", "string" ] }
     ],
     "surroundingPairs": [
-        ["(", ")"],
-        ["[", "]"],
-        ["{", "}"]
+        [ "(", ")" ],
+        [ "[ ", " ]" ],
+        [ "{", "}" ]
     ],
     "folding": {
-        "markers":
-        {
+        "markers": {
             "start": "[//]\\s?#region",
             "end": "[//]\\s?#endregion"
         },
