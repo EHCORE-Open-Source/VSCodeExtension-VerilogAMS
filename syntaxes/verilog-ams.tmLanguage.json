@@ -72,7 +72,7 @@
             "patterns": [
                 {
                     "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
-                    "begin": "\\b(module)\\s+([[:alpha:]_][[:alnum]_$]*)",
+                    "begin": "\\b(module)\\s+([[:alpha:]_][[:alnum:]_$]*)",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.control.vams"
