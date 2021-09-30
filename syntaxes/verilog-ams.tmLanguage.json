@@ -33,11 +33,11 @@
                     "comment": "block comment",
                     "begin": "/\\*",
                     "end": "\\*/",
-                    "name": "comment.block.va"
+                    "name": "comment.block.vams"
                 },
                 {
                     "comment": "line comment",
-                    "name": "comment.line.va",
+                    "name": "comment.line.vams",
                     "match": "//.*"
                 }
             ]
@@ -46,7 +46,7 @@
             "patterns": [
                 {
                     "comment": "numeric for scientific or symbol notation",
-                    "name": "constant.numeric.va",
+                    "name": "constant.numeric.vams",
                     "match": "([+-]?[0-9_]+(\\.[0-9_]+)?([eE][+-]?[0-9_]+|[TGMKkmunpfa])?($|\\s+))"
                 }
             ]
@@ -57,10 +57,10 @@
                     "comment": "double quotes",
                     "begin": "\\\"", 
                     "end": "\\\"",
-                    "name": "string.quoted.double.va",
+                    "name": "string.quoted.double.vams",
 		            "patterns": [
                         {
-                            "name": "constant.character.escape.va",
+                            "name": "constant.character.escape.vams",
                             "match": "\\\\([nt\\x5C\\x22]|[01]?[0-7]{1,2})"
                         }
                     ]
