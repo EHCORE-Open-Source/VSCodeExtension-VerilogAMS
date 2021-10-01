@@ -6,7 +6,6 @@ V(out) <+ gain * V(in);
 end
 endmodule
 
-
 /* 
  this is a comment
 */
@@ -26,12 +25,16 @@ endmodule
 
 6.m
 
+
+
 connect
 
 "\\stri\n\tngsri\nng\'\"str\\in\\\gas\ttt\?ri\177n\077g\326";
 "string"
 'string'
 access
+
+connect
 
 module comparator(cout, inp, inm);
 reg a;
@@ -47,6 +50,8 @@ access
         V(cout) <+ transition(vcout, td, tr, tf);
     end
 endmodule
+
+
 
 module
 endmodule

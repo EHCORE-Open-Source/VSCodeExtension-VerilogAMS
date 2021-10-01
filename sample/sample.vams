@@ -22,9 +22,11 @@ endmodule
 29E-2 
 236.123_763_e-12 // underscores are ignored
 1.3u 
-7k 
+7k
 
 6.m
+.8k
+93.53.53
 
 connect
 
@@ -34,6 +36,8 @@ connect
 'string'
 access ;
 ;
+
+connect
 
 module comparator(cout, inp, inm);
 reg a;
@@ -47,6 +51,10 @@ access
         @(cross(V(inp) - V(inm), 0))
             vcout = ((V(inp) > V(inm)) ? 1 : 0);
         V(cout) <+ transition(vcout, td, tr, tf);
+        if(inp == 1)
+        begin
+            
+        end
     end
 endmodule
 

@@ -34,13 +34,17 @@
         "grammars": [
             {
                 "language": "verilog-ams",
-                "scopeName": "source.vams",
+                "scopeName": "source.verilog.analog.mixedsignal",
                 "path": "./syntaxes/verilog-ams.tmLanguage.json"
             },
             {
                 "language": "verilog-a",
-                "scopeName": "source.va",
+                "scopeName": "source.verilog.analog",
                 "path": "./syntaxes/verilog-a.tmLanguage.json"
+            },
+            {
+                "scopeName": "source.verilog.analog.basic",
+                "path": "./syntaxes/verilog.analog/basic.tmLanguage.json"
             }
         ]
     },
