@@ -23,12 +23,12 @@
     ],
     "autoClosingPairs": [
         { "open": "(", "close": ")", "notIn": [ "comment", "string" ] },
-        { "open": "[ ", "close": " ]", "notIn": [ "comment", "string" ] },
+        { "open": "[", "close": "]", "notIn": [ "comment", "string" ] },
         { "open": "{", "close": "}", "notIn": [ "comment", "string" ] }
     ],
     "surroundingPairs": [
         [ "(", ")" ],
-        [ "[ ", " ]" ],
+        [ "[", "]" ],
         [ "{", "}" ]
     ],
     "folding": {
