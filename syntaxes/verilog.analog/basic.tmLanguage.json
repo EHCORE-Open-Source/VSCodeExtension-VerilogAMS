@@ -92,7 +92,7 @@
             "patterns": [
                 {
                     "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
-                    "match": "(^|[\\s;])(module)(\\s+([[:alpha:]_][[:alnum:]_$]*))?",
+                    "match": "(^|[\\s;])(module)(\\s+([[:word:]][[:word:]$]*))?",
                     "captures": {
                         "2": {
                             "name": "keyword.other.verilog.analog.basic"
