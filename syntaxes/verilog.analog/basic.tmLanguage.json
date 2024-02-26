@@ -125,7 +125,7 @@
                 },
                 {
                     "comment": "built-in functions",
-                    "match": "\\$(abstime|arandom|bound_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|random|root|stop|warning|write)\\b",
+                    "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|warning|write)\\b",
                     "name": "entity.name.function.basic",
                     "captures": {
                         "0": {
