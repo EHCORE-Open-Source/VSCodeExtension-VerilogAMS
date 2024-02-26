@@ -83,8 +83,8 @@
                     "match": "\\b(begin|end)\\b"
                 },
                 {
-                    "comment": "define",
-                    "match": "^\\s*(`(include|define))\\s*([[:word:]]*)\\b",
+                    "comment": "compiler directives (define)",
+                    "match": "^\\s*(`(define))\\s*([[:word:]]*)\\b",
                     "captures": {
                         "1": {
                             "name": "keyword.control.verilog.analog.basic"
@@ -93,6 +93,11 @@
                             "name": "keyword.other.verilog.analog.basic"
                         }
                     }
+                },
+                {
+                    "comment": "compiler directives (others)",
+                    "match": "^\\s*(`(begin_keywords|(end)?celldefine|default\\_(discipline|nettype|transition)|else|elsif|end\\_keywords|endif|(ifn?|un)def|include|line|(noun|un)connected\\_drive|pragma|resetall|timescale|))\\s*([[:word:]]*)\\b",
+                    "name": "keyword.control.verilog.analog.basic"
                 },
                 {
                     "name": "keyword.other.verilog.analog.basic",
@@ -120,7 +125,7 @@
                 },
                 {
                     "comment": "built-in functions",
-                    "match": "\\$(arandom|display|error|fatal|finish|info|random|root|stop|warning)\\b",
+                    "match": "\\$(abstime|arandom|bound_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|random|root|stop|warning|write)\\b",
                     "name": "entity.name.function.basic",
                     "captures": {
                         "0": {
