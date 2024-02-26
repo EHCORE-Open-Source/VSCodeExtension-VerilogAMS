@@ -83,8 +83,24 @@
                     "match": "\\b(begin|end)\\b"
                 },
                 {
+                    "comment": "define",
+                    "match": "^\\s*(`(include|define))\\s*([[:word:]]*)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.verilog.analog.basic"
+                        },
+                        "3": {
+                            "name": "keyword.other.verilog.analog.basic"
+                        }
+                    }
+                },
+                {
                     "name": "keyword.other.verilog.analog.basic",
                     "match": "\\b(access|acosh?|ac_stim|aliasparam|always|analog|analysis|and|asin|asinh|assert|assign|atan[2h]?|atanh|automatic|branch|buf(if[01])?|ce[il]l|cmos|config|continuous|cosh?|cross|ddt|ddt_nature|ddx|deassign|default|defparam|design|disable|discipline|discrete|domain|edge|end(config|discipline|function|generate|module|nature|paramset|primitive|specify|table|task)|event|exclude|exp|final_step|flicker_noise|floor|flow|force|forever|fork|from|function|generate|genvar|ground|highz[01]?|hypot|idt|idtmod|idt_nature|ifnone|incdir|include|inf|initial|initial_step|inout|input|instance|integer|join|laplace_(nd|np|zd|zp)|large|last_crossing|liblist|library|limexp|ln|localparam|log|macromodule|max|medium|min|nand|nature|negedge|nmos|noise_table|noise_table_log|nor|noshowcancelled|notif[01]?|or|output|parameter|paramset|pmos|posedge|potential|pow|primitive|pull(0|1|down|up)?|pulsestyle_(onevent|ondetect)|rcmos|real|realtime|reg|release|rnmos|rpmos|rtran(if[01])?|scalared|sin|sinh|showcancelled|signed|slew|small|specify|specparam|sqrt|string|strong[01]?|supply[01]?|table|tan|tanh|task|timer?|tran(if[01])?|transition|tri[01]?|triand|trior|trireg|units|unsigned|use|uwire|vectored|wait|wand|weak[01]?|while|white_noise|wire|wor|xnor|xor|zi_(nd|np|zd|zp))\\b"
+                },
+                {
+                    "name": "keyword.signal.verilog.analog.basic",
+                    "match": "\\b(current|electrical|voltage)\\b"
                 }
             ]
         },
@@ -98,6 +114,16 @@
                             "name": "keyword.other.verilog.analog.basic"
                         },
                         "4": {
+                            "name": "strong.verilog.analog.basic"
+                        }
+                    }
+                },
+                {
+                    "comment": "built-in functions",
+                    "match": "\\$(arandom|display|error|fatal|finish|info|random|root|stop|warning)\\b",
+                    "name": "entity.name.function.basic",
+                    "captures": {
+                        "0": {
                             "name": "strong.verilog.analog.basic"
                         }
                     }

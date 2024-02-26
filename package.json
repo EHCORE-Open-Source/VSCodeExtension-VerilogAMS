@@ -20,14 +20,22 @@
         "languages": [
             {
                 "id": "verilog-ams",
-                "aliases": [ "Verilog-AMS" ],
-                "extensions": [ ".vams" ],
+                "aliases": [
+                    "Verilog-AMS"
+                ],
+                "extensions": [
+                    ".vams"
+                ],
                 "configuration": "./verilog-ams.language-configuration.json"
             },
             {
                 "id": "verilog-a",
-                "aliases": [ "Verilog-A" ],
-                "extensions": [ ".va" ],
+                "aliases": [
+                    "Verilog-A"
+                ],
+                "extensions": [
+                    ".va"
+                ],
                 "configuration": "./verilog-a.language-configuration.json"
             }
         ],
@@ -49,7 +57,7 @@
         ]
     },
     "dependencies": {
-        "@types/node": "^16.9.1",
-        "@types/vscode": "^1.60.0"
+        "@types/node": "^16.18.83",
+        "@types/vscode": "^1.86.0"
     }
 }
