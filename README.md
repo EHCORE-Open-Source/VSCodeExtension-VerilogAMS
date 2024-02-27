@@ -1,9 +1,9 @@
-# Synopsys Verilog-AMS Syntax Highlighting README
-The extension is help to parse Synopsys Verilog-AMS output files *.vams or *.va.
+# Verilog-AMS Syntax Highlighting README
+The extension is help to parse Verilog-AMS output files *.vams or *.va.
 ## Features
 > Tip: *.vams or *.va data highlighting.
 ## Requirements
-Support Synopsys Verilog-AMS output files.
+Support Verilog-A and Verilog-AMS output files.
 ## Extension Settings
 No context.
 ## Known Issues
