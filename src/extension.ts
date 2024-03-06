@@ -340,12 +340,31 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
 
     // Create the port outline
     portSet.forEach(portName => {
+
+        let portDirection: string = '<unknown ??>';
+        let portType: string = '<unknown ??>';
+        let portDescriptionLine: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));;
+        
+        // Define the port interface and description line
+        if (portProperty[portName].interface.context != '') {
+            portDirection = portProperty[portName].interface.context;
+            portDescriptionLine = portProperty[portName].interface.range;
+        }
+
+        // Define the port type and description line
+        if (portProperty[portName].type.context != '') {
+            portType = portProperty[portName].type.context;
+            if (portProperty[portName].interface == undefined) {
+                portDescriptionLine = portProperty[portName].type.range;
+            }
+        }
+        
         let nextSymbol = new vscode.DocumentSymbol(
             portName, 
-            portProperty[portName].interface.context,
+            `${portDirection} = ${portType}`,
             vscode.SymbolKind.Interface,
-            portProperty[portName].interface.range,
-            portProperty[portName].interface.range
+            portDescriptionLine,
+            portDescriptionLine
         );
 
         // // Add the type property
