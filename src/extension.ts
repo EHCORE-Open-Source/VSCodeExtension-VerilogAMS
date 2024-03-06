@@ -219,6 +219,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
     var parameterProperty: { [key: string]: ParameterObj; } = {};
 
     const regexInterface: RegExp = /^(inout|input|output)\s*(\[[^\]]*\])?\s*/;
+    const regexInterfaceType: RegExp = /^(voltage|current|electrical)\s*(\[[^\]]*\])?\s*/;
     const regexParameter: RegExp = /^parameter\s*(real|integer)\s*/;
     const regexToken: RegExp = /^([^,;]*)[,;]/;
     var matches: RegExpExecArray|null;
@@ -241,9 +242,32 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                     portSet.add(portName);
                     if (portProperty[portName] == undefined) {
                         portProperty[portName] = new ModulePortObj();
-                        portProperty[portName].interface = new PortObj(portDirection, line.range);
-                        if (portVector != undefined) portProperty[portName].interface.vector = portVector;
                     }
+                    portProperty[portName].interface = new PortObj(portDirection, line.range);
+                    if (portVector != undefined) portProperty[portName].interface.vector = portVector;
+                }
+            } while(matches);
+        }
+
+        // Parse the interface type
+        matches = regexInterfaceType.exec(line.context);
+        if (matches) {
+            lineContext = line.context.substring(matches[0].length);
+            var portElectricity = matches[1];
+            var portVector = matches[2];
+            do {
+                matches = regexToken.exec(lineContext);
+                if (matches) {
+                    lineContext = lineContext.substring(matches[0].length);
+                    var portName = matches[1].trim();
+
+                    // Add the item into the dictionary
+                    portSet.add(portName);
+                    if (portProperty[portName] == undefined) {
+                        portProperty[portName] = new ModulePortObj();
+                    }
+                    portProperty[portName].type = new PortObj(portElectricity, line.range);
+                    if (portVector != undefined) portProperty[portName].type.vector = portVector;
                 }
             } while(matches);
         }
@@ -278,6 +302,17 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
             portProperty[portName].interface.range,
             portProperty[portName].interface.range
         );
+
+        // // Add the type property
+        // if (portProperty[portName].type != undefined) {
+        //     nextSymbol.children.push(new vscode.DocumentSymbol(
+        //         portProperty[portName].type.context, 
+        //         '',
+        //         vscode.SymbolKind.Function,
+        //         portProperty[portName].type.range,
+        //         portProperty[portName].type.range
+        //     ));
+        // }
 
         // Add the vector property
         if (portProperty[portName].interface.vector != '') {
