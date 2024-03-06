@@ -10,6 +10,18 @@ interface ITextBlock {
     line: LineObj[];
 }
 
+interface IModulePort {
+    interface: LineObj;
+    type: LineObj;
+    vector: LineObj;
+}
+
+class ModulePortObj implements IModulePort {
+    public interface: LineObj = new LineObj();
+    public type: LineObj = new LineObj();
+    public vector: LineObj = new LineObj();
+}
+
 class TextBlockObj implements ITextBlock {
     public line: LineObj[] = [];
 }
@@ -17,9 +29,9 @@ class TextBlockObj implements ITextBlock {
 class LineObj {
     public context: string = '';
     public range: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
-    constructor( context:string, range: vscode.Range){
-        this.context = context;
-        this.range = range;
+    constructor( context?: string, range?: vscode.Range){
+        if (context) this.context = context;
+        if (range) this.range = range;
     }
 }
 
@@ -177,33 +189,51 @@ function parseVerilogA(textBlocks: Array<TextBlockObj>) {
 }
 
 function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbol) {
-    // var port: Set<string> = new Set<string>();
+    var portSet: Set<string> = new Set<string>();
+    var portProperty: { [key: string]: ModulePortObj; } = {};
+    var portName: string;
 
     const regexInterface: RegExp = /^((inout|input|output)\s*(\[[^\]]*\])?)\s*/;
     const regexToken: RegExp = /^([^,;]*)[,;]/;
     var matches: RegExpExecArray|null;
     var lineContext: string;
     var typeInterface: string;
+    var typeVector: string;
     
     textBlock.forEach(line => {
         matches = regexInterface.exec(line.context);
         if (matches) {
             lineContext = line.context.substring(matches[0].length);
-            typeInterface = matches[1];
+            typeInterface = matches[2];
+            typeVector = matches[3];
             do {
                 matches = regexToken.exec(lineContext);
                 if (matches) {
                     // console.log(matches[0]);
                     lineContext = lineContext.substring(matches[0].length);
+                    portName = matches[1].trim();
 
-                    let nextSymbol = new vscode.DocumentSymbol(
-                        matches[1].trim(), 
-                        typeInterface,
-                        vscode.SymbolKind.Interface,
-                        line.range,
-                        line.range
-                    );
-                    symbol.children.push(nextSymbol);
+                    // Add the item into the dictionary
+                    portSet.add(portName);
+                    if (portProperty[portName] == undefined) {
+                        portProperty[portName] = new ModulePortObj();
+                        portProperty[portName].interface = new LineObj(typeInterface, line.range);
+                        if (typeVector != undefined) {
+                            portProperty[portName].vector = new LineObj(typeVector, line.range);
+                        }
+                    }
+
+                    // if (!portList.get(portName)) {
+                    //     portList.set(portName, new ModulePortObj)
+                    // }
+                    // let nextSymbol = new vscode.DocumentSymbol(
+                    //     matches[1].trim(), 
+                    //     typeInterface,
+                    //     vscode.SymbolKind.Interface,
+                    //     line.range,
+                    //     line.range
+                    // );
+                    // symbol.children.push(nextSymbol);
                 }
             } while(matches);
             matches = regexToken.exec(lineContext);
@@ -211,5 +241,38 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                 console.log(matches[0]);
             }
         }
+    });
+
+    // Create the port outline
+    portSet.forEach(portName => {
+        let nextSymbol = new vscode.DocumentSymbol(
+            portName, 
+            portProperty[portName].interface.context,
+            vscode.SymbolKind.Interface,
+            portProperty[portName].interface.range,
+            portProperty[portName].interface.range
+        );
+        
+        if (portProperty[portName].type.context != '') {
+            nextSymbol.children.push(new vscode.DocumentSymbol(
+                portProperty[portName].type.context, 
+                '',
+                vscode.SymbolKind.TypeParameter,
+                portProperty[portName].type.range,
+                portProperty[portName].type.range
+            ));
+        }
+
+        if (portProperty[portName].vector.context != '') {
+            nextSymbol.children.push(new vscode.DocumentSymbol(
+                portProperty[portName].vector.context,
+                'BUS',
+                vscode.SymbolKind.Class,
+                portProperty[portName].vector.range,
+                portProperty[portName].vector.range
+            ));
+        }
+
+        symbol.children.push(nextSymbol);
     });
 }
