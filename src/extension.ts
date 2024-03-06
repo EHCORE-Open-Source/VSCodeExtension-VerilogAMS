@@ -6,11 +6,11 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({language: "verilog-a" }, new DocumentSymbolProvider()));
 }
 
-interface ITextBlockObj {
+interface ITextBlock {
     line: LineObj[];
 }
 
-class TextBlockObj implements ITextBlockObj {
+class TextBlockObj implements ITextBlock {
     public line: LineObj[] = [];
 }
 
