@@ -12,12 +12,16 @@ interface ITextBlock {
 
 interface IModulePort {
     interface: PortObj;
-    vector: PortObj;
+    type: PortObj;
 }
 
 class ModulePortObj implements IModulePort {
     public interface: PortObj = new PortObj();
-    public vector: PortObj = new PortObj();
+    public type: PortObj = new PortObj();
+}
+
+class ModuleParameterObj {
+    public type: LineObj = new LineObj();
 }
 
 class PortObj {
@@ -40,6 +44,17 @@ class LineObj {
     constructor( context?: string, range?: vscode.Range){
         if (context) this.context = context;
         if (range) this.range = range;
+    }
+}
+
+class ParameterObj {
+    public type: string = '';
+    public defaultValue: any = undefined;
+    public range: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+    constructor( type?: string, range?: vscode.Range, defaultValue?: any ){
+        if (type) this.type = type;
+        if (range) this.range = range;
+        if (defaultValue) this.defaultValue = defaultValue;
     }
 }
 
@@ -133,7 +148,7 @@ class DocumentSymbolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(
         document: vscode.TextDocument,
         token: vscode.CancellationToken): Promise<vscode.DocumentSymbol[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const textBlocks = organize(document);
             resolve(parseVerilogA(textBlocks));
         });
@@ -199,35 +214,55 @@ function parseVerilogA(textBlocks: Array<TextBlockObj>) {
 function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbol) {
     var portSet: Set<string> = new Set<string>();
     var portProperty: { [key: string]: ModulePortObj; } = {};
-    var portName: string;
 
-    const regexInterface: RegExp = /^((inout|input|output)\s*(\[[^\]]*\])?)\s*/;
+    var parameterSet: Set<string> = new Set<string>();
+    var parameterProperty: { [key: string]: ParameterObj; } = {};
+
+    const regexInterface: RegExp = /^(inout|input|output)\s*(\[[^\]]*\])?\s*/;
+    const regexParameter: RegExp = /^parameter\s*(real|integer)\s*/;
     const regexToken: RegExp = /^([^,;]*)[,;]/;
     var matches: RegExpExecArray|null;
     var lineContext: string;
-    var typeInterface: string;
-    var typeVector: string;
     
     textBlock.forEach(line => {
         // Parse the interface
         matches = regexInterface.exec(line.context);
         if (matches) {
             lineContext = line.context.substring(matches[0].length);
-            typeInterface = matches[2];
-            typeVector = matches[3];
+            var portDirection = matches[1];
+            var portVector = matches[2];
             do {
                 matches = regexToken.exec(lineContext);
                 if (matches) {
-                    // console.log(matches[0]);
                     lineContext = lineContext.substring(matches[0].length);
-                    portName = matches[1].trim();
+                    var portName = matches[1].trim();
 
                     // Add the item into the dictionary
                     portSet.add(portName);
                     if (portProperty[portName] == undefined) {
                         portProperty[portName] = new ModulePortObj();
-                        portProperty[portName].interface = new PortObj(typeInterface, line.range);
-                        portProperty[portName].interface.vector = typeVector;
+                        portProperty[portName].interface = new PortObj(portDirection, line.range);
+                        if (portVector != undefined) portProperty[portName].interface.vector = portVector;
+                    }
+                }
+            } while(matches);
+        }
+
+        // Parse the parameter
+        matches = regexParameter.exec(line.context);
+        if (matches) {
+            lineContext = line.context.substring(matches[0].length);
+            var parameterType = matches[1];
+            do {
+                matches = regexToken.exec(lineContext);
+                if (matches) {
+                    lineContext = lineContext.substring(matches[0].length);
+                    var paramName = matches[1].trim();
+
+                    // Add the item into the dictionary
+                    parameterSet.add(paramName);
+                    if (parameterProperty[paramName] == undefined) {
+                        parameterProperty[paramName] = new ParameterObj(parameterType, line.range);
                     }
                 }
             } while(matches);
@@ -243,34 +278,30 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
             portProperty[portName].interface.range,
             portProperty[portName].interface.range
         );
-        
-        try
-        {
-            if (portProperty[portName].interface.vector != undefined) {
-                nextSymbol.children.push(new vscode.DocumentSymbol(
-                    portProperty[portName].interface.vector, 
-                    '',
-                    vscode.SymbolKind.Class,
-                    portProperty[portName].interface.range,
-                    portProperty[portName].interface.range
-                ));
-            }
-    
-        }
-        catch (ex) {
-            console.log(ex);
-        }
 
-        if (portProperty[portName].vector.context != '') {
+        // Add the vector property
+        if (portProperty[portName].interface.vector != '') {
             nextSymbol.children.push(new vscode.DocumentSymbol(
-                portProperty[portName].vector.context,
-                'BUS',
+                portProperty[portName].interface.vector, 
+                '',
                 vscode.SymbolKind.Class,
-                portProperty[portName].vector.range,
-                portProperty[portName].vector.range
+                portProperty[portName].interface.range,
+                portProperty[portName].interface.range
             ));
         }
 
+        symbol.children.push(nextSymbol);
+    });
+
+    // Create the parameter outline
+    parameterSet.forEach(parameterName => {
+        let nextSymbol = new vscode.DocumentSymbol(
+            parameterName, 
+            parameterProperty[parameterName].type,
+            vscode.SymbolKind.Field,
+            parameterProperty[parameterName].range,
+            parameterProperty[parameterName].range
+        );
         symbol.children.push(nextSymbol);
     });
 }
