@@ -201,6 +201,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
     var typeVector: string;
     
     textBlock.forEach(line => {
+        // Parse the interface
         matches = regexInterface.exec(line.context);
         if (matches) {
             lineContext = line.context.substring(matches[0].length);
@@ -222,24 +223,8 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                             portProperty[portName].vector = new LineObj(typeVector, line.range);
                         }
                     }
-
-                    // if (!portList.get(portName)) {
-                    //     portList.set(portName, new ModulePortObj)
-                    // }
-                    // let nextSymbol = new vscode.DocumentSymbol(
-                    //     matches[1].trim(), 
-                    //     typeInterface,
-                    //     vscode.SymbolKind.Interface,
-                    //     line.range,
-                    //     line.range
-                    // );
-                    // symbol.children.push(nextSymbol);
                 }
             } while(matches);
-            matches = regexToken.exec(lineContext);
-            if (matches) {
-                console.log(matches[0]);
-            }
         }
     });
 
