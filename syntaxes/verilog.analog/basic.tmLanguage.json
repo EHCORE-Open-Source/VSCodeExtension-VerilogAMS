@@ -152,6 +152,16 @@
                             "name": "strong.verilog.analog.basic"
                         }
                     }
+                },
+                {
+                    "comment": "file system",
+                    "match": "\\$(f(open|close|gets))\\b",
+                    "name": "entity.name.function.basic",
+                    "captures": {
+                        "0": {
+                            "name": "strong.verilog.analog.basic"
+                        }
+                    }
                 }
             ]
         }
