@@ -169,16 +169,17 @@ function parseVerilogA(textBlocks: Array<TextBlockObj>) {
     let symbols: vscode.DocumentSymbol[] = [];
 
     var matches: RegExpExecArray | null;
-    const regexDefine = /^`define\s+([^\s]*)/;
+    const regexDefine = /^`define\s+([^\s]*)\s+(.*)/;
     const regexInclude = /^`include\s+\"([^\s]*)\"/;
     const regexModule = /^module\s+([^\s(]*)/;
 
     textBlocks.forEach(textBlock => {
         matches = regexDefine.exec(textBlock.line[0].context);
         if (matches) {
+            let defineString: string = `define = ${matches[2]}`;
             let symbol = new vscode.DocumentSymbol(
                 matches[1], 
-                'define',
+                defineString,
                 vscode.SymbolKind.Constant,
                 textBlock.line[0].range,
                 textBlock.line[0].range
@@ -236,6 +237,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
     const regexParameter: RegExp = /^parameter\s*(real|integer)\s*/;
     const regexVariable: RegExp = /^(real|integer|string)\s*/;
     const regexToken: RegExp = /^([^,;]*)[,;]/;
+    const regexTokenParameter: RegExp = /^([^=]*)=([^,;]*)[,;]/;
     const regexTokenVector: RegExp = /^([^,;\[]*)\s*(\[[^\]]*\])?[,;]/;
     var matches: RegExpExecArray|null;
     var lineContext: string;
@@ -293,7 +295,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
             lineContext = line.context.substring(matches[0].length);
             var parameterType = matches[1];
             do {
-                matches = regexToken.exec(lineContext);
+                matches = regexTokenParameter.exec(lineContext);
                 if (matches) {
                     lineContext = lineContext.substring(matches[0].length);
                     var paramName = matches[1].trim();
@@ -301,7 +303,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                     // Add the item into the dictionary
                     parameterSet.add(paramName);
                     if (parameterProperty[paramName] == undefined) {
-                        parameterProperty[paramName] = new ParameterObj(parameterType, line.range);
+                        parameterProperty[paramName] = new ParameterObj(`${parameterType} = ${matches[2].trim()}`, line.range);
                     }
                 }
             } while(matches);
