@@ -11,15 +11,23 @@ interface ITextBlock {
 }
 
 interface IModulePort {
-    interface: LineObj;
-    type: LineObj;
-    vector: LineObj;
+    interface: PortObj;
+    vector: PortObj;
 }
 
 class ModulePortObj implements IModulePort {
-    public interface: LineObj = new LineObj();
-    public type: LineObj = new LineObj();
-    public vector: LineObj = new LineObj();
+    public interface: PortObj = new PortObj();
+    public vector: PortObj = new PortObj();
+}
+
+class PortObj {
+    public context: string = '';
+    public vector: string = '';
+    public range: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+    constructor( context?: string, range?: vscode.Range){
+        if (context) this.context = context;
+        if (range) this.range = range;
+    }
 }
 
 class TextBlockObj implements ITextBlock {
@@ -218,10 +226,8 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                     portSet.add(portName);
                     if (portProperty[portName] == undefined) {
                         portProperty[portName] = new ModulePortObj();
-                        portProperty[portName].interface = new LineObj(typeInterface, line.range);
-                        if (typeVector != undefined) {
-                            portProperty[portName].vector = new LineObj(typeVector, line.range);
-                        }
+                        portProperty[portName].interface = new PortObj(typeInterface, line.range);
+                        portProperty[portName].interface.vector = typeVector;
                     }
                 }
             } while(matches);
@@ -238,14 +244,21 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
             portProperty[portName].interface.range
         );
         
-        if (portProperty[portName].type.context != '') {
-            nextSymbol.children.push(new vscode.DocumentSymbol(
-                portProperty[portName].type.context, 
-                '',
-                vscode.SymbolKind.TypeParameter,
-                portProperty[portName].type.range,
-                portProperty[portName].type.range
-            ));
+        try
+        {
+            if (portProperty[portName].interface.vector != undefined) {
+                nextSymbol.children.push(new vscode.DocumentSymbol(
+                    portProperty[portName].interface.vector, 
+                    '',
+                    vscode.SymbolKind.Class,
+                    portProperty[portName].interface.range,
+                    portProperty[portName].interface.range
+                ));
+            }
+    
+        }
+        catch (ex) {
+            console.log(ex);
         }
 
         if (portProperty[portName].vector.context != '') {
