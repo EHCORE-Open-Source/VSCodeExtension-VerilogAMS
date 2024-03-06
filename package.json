@@ -3,7 +3,7 @@
     "displayName": "Verilog-AMS Extension",
     "description": "Verilog-AMS and Verilog-A Support",
     "version": "0.0.1",
-    "publisher": "itri-ehcore",
+    "publisher": "Chao-Jen Huang",
     "private": false,
     "license": "GPL",
     "repository": {
@@ -16,6 +16,7 @@
     "categories": [
         "Programming Languages"
     ],
+    "main": "./out/extension.js",
     "contributes": {
         "languages": [
             {
@@ -56,8 +57,16 @@
             }
         ]
     },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "vscode-test"
+    },
     "dependencies": {
-        "@types/node": "^16.18.83",
-        "@types/vscode": "^1.86.0"
+        "@types/node": "^16.18.86",
+        "@types/vscode": "^1.87.0"
     }
 }
