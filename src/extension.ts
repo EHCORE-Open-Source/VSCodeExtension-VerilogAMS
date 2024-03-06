@@ -58,6 +58,16 @@ class ParameterObj {
     }
 }
 
+class VariableObj {
+    public type: string = '';
+    public vector: string = ''
+    public range: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+    constructor( type?: string, range?: vscode.Range ){
+        if (type) this.type = type;
+        if (range) this.range = range;
+    }
+}
+
 function organize(document: vscode.TextDocument) {
     var textBlocks = new Array<TextBlockObj>();
     var tmpTextBlock = new TextBlockObj();
@@ -218,10 +228,15 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
     var parameterSet: Set<string> = new Set<string>();
     var parameterProperty: { [key: string]: ParameterObj; } = {};
 
+    var variableSet: Set<string> = new Set<string>();
+    var variableProperty: { [key: string]: VariableObj; } = {};
+
     const regexInterface: RegExp = /^(inout|input|output)\s*(\[[^\]]*\])?\s*/;
     const regexInterfaceType: RegExp = /^(voltage|current|electrical)\s*(\[[^\]]*\])?\s*/;
     const regexParameter: RegExp = /^parameter\s*(real|integer)\s*/;
+    const regexVariable: RegExp = /^(real|integer|string)\s*/;
     const regexToken: RegExp = /^([^,;]*)[,;]/;
+    const regexTokenVector: RegExp = /^([^,;\[]*)\s*(\[[^\]]*\])?[,;]/;
     var matches: RegExpExecArray|null;
     var lineContext: string;
     
@@ -291,6 +306,30 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                 }
             } while(matches);
         }
+
+        // Parse the variables
+        matches = regexVariable.exec(line.context);
+        if (matches) {
+            lineContext = line.context.substring(matches[0].length);
+            var variableType = matches[1];
+            do {
+                matches = regexTokenVector.exec(lineContext);
+                if (matches) {
+                    lineContext = lineContext.substring(matches[0].length);
+                    var paramName = matches[1].trim();
+                    var paramVector = matches[2];
+
+                    // Add the item into the dictionary
+                    variableSet.add(paramName);
+                    if (variableProperty[paramName] == undefined) {
+                        variableProperty[paramName] = new VariableObj(variableType, line.range);
+                    }
+                    if (paramVector != undefined) {
+                        variableProperty[paramName].vector = paramVector;
+                    }
+                }
+            } while(matches);
+        }
     });
 
     // Create the port outline
@@ -336,6 +375,18 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
             vscode.SymbolKind.Field,
             parameterProperty[parameterName].range,
             parameterProperty[parameterName].range
+        );
+        symbol.children.push(nextSymbol);
+    });
+
+    // Create the variable outline
+    variableSet.forEach(variableName => {
+        let nextSymbol = new vscode.DocumentSymbol(
+            variableName, 
+            variableProperty[variableName].type,
+            vscode.SymbolKind.Variable,
+            variableProperty[variableName].range,
+            variableProperty[variableName].range
         );
         symbol.children.push(nextSymbol);
     });
