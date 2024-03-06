@@ -254,6 +254,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                 if (matches) {
                     lineContext = lineContext.substring(matches[0].length);
                     var portName = matches[1].trim();
+                    if (portName.length == 0) continue;
 
                     // Add the item into the dictionary
                     portSet.add(portName);
@@ -277,6 +278,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                 if (matches) {
                     lineContext = lineContext.substring(matches[0].length);
                     var portName = matches[1].trim();
+                    if (portName.length == 0) continue;
 
                     // Add the item into the dictionary
                     portSet.add(portName);
@@ -299,6 +301,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                 if (matches) {
                     lineContext = lineContext.substring(matches[0].length);
                     var paramName = matches[1].trim();
+                    if (paramName.length == 0) continue;
 
                     // Add the item into the dictionary
                     parameterSet.add(paramName);
@@ -320,6 +323,7 @@ function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbo
                     lineContext = lineContext.substring(matches[0].length);
                     var paramName = matches[1].trim();
                     var paramVector = matches[2];
+                    if (paramName.length == 0) continue;
 
                     // Add the item into the dictionary
                     variableSet.add(paramName);
