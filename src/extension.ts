@@ -114,58 +114,102 @@ class DocumentSymbolProvider implements vscode.DocumentSymbolProvider {
         document: vscode.TextDocument,
         token: vscode.CancellationToken): Promise<vscode.DocumentSymbol[]> {
         return new Promise((resolve, reject) => {
-            let symbols: vscode.DocumentSymbol[] = [];
             const textBlocks = organize(document);
-            
-            var matches: RegExpExecArray | null;
-            const regexDefine = /^`define\s+([^\s]*)/;
-            const regexInclude = /^`include\s+\"([^\s]*)\"/;
-            const regexModule = /^module\s+([^\s(]*)/;
-
-            textBlocks.forEach(textBlock => {
-                matches = regexDefine.exec(textBlock.line[0].context);
-                if (matches) {
-                    let symbol = new vscode.DocumentSymbol(
-                        matches[1], 
-                        'define',
-                        vscode.SymbolKind.Constant,
-                        textBlock.line[0].range,
-                        textBlock.line[0].range
-                    );
-                    symbols.push(symbol);
-                    return;
-                }
-
-                matches = regexInclude.exec(textBlock.line[0].context);
-                if (matches) {
-                    let symbol = new vscode.DocumentSymbol(
-                        matches[1], 
-                        'include',
-                        vscode.SymbolKind.File,
-                        textBlock.line[0].range,
-                        textBlock.line[0].range
-                    );
-                    symbols.push(symbol);
-                    return;
-                }
-
-                matches = regexModule.exec(textBlock.line[0].context);
-                if (matches) {
-                    let symbol = new vscode.DocumentSymbol(
-                        matches[1], 
-                        'module',
-                        vscode.SymbolKind.Module,
-                        textBlock.line[0].range,
-                        textBlock.line[0].range
-                    );
-                    
-                    // symbol.children.push()
-                    symbols.push(symbol);
-                    return;
-                }
-                
-            });
-            resolve(symbols);
+            resolve(parseVerilogA(textBlocks));
         });
     }    
+}
+
+function parseVerilogA(textBlocks: Array<TextBlockObj>) {
+    let symbols: vscode.DocumentSymbol[] = [];
+
+    var matches: RegExpExecArray | null;
+    const regexDefine = /^`define\s+([^\s]*)/;
+    const regexInclude = /^`include\s+\"([^\s]*)\"/;
+    const regexModule = /^module\s+([^\s(]*)/;
+
+    textBlocks.forEach(textBlock => {
+        matches = regexDefine.exec(textBlock.line[0].context);
+        if (matches) {
+            let symbol = new vscode.DocumentSymbol(
+                matches[1], 
+                'define',
+                vscode.SymbolKind.Constant,
+                textBlock.line[0].range,
+                textBlock.line[0].range
+            );
+            symbols.push(symbol);
+            return;
+        }
+
+        matches = regexInclude.exec(textBlock.line[0].context);
+        if (matches) {
+            let symbol = new vscode.DocumentSymbol(
+                matches[1], 
+                'include',
+                vscode.SymbolKind.File,
+                textBlock.line[0].range,
+                textBlock.line[0].range
+            );
+            symbols.push(symbol);
+            return;
+        }
+
+        matches = regexModule.exec(textBlock.line[0].context);
+        if (matches) {
+            let symbol = new vscode.DocumentSymbol(
+                matches[1], 
+                'module',
+                vscode.SymbolKind.Module,
+                textBlock.line[0].range,
+                textBlock.line[0].range
+            );
+
+            // Add the children in the symbol
+            parseVerilogA_module(textBlock.line, symbol);
+            symbols.push(symbol);
+            return;
+        }
+        
+    });
+
+    return symbols;
+}
+
+function parseVerilogA_module(textBlock: LineObj[], symbol: vscode.DocumentSymbol) {
+    // var port: Set<string> = new Set<string>();
+
+    const regexInterface: RegExp = /^((inout|input|output)\s*(\[[^\]]*\])?)\s*/;
+    const regexToken: RegExp = /^([^,;]*)[,;]/;
+    var matches: RegExpExecArray|null;
+    var lineContext: string;
+    var typeInterface: string;
+    
+    textBlock.forEach(line => {
+        matches = regexInterface.exec(line.context);
+        if (matches) {
+            lineContext = line.context.substring(matches[0].length);
+            typeInterface = matches[1];
+            do {
+                matches = regexToken.exec(lineContext);
+                if (matches) {
+                    // console.log(matches[0]);
+                    lineContext = lineContext.substring(matches[0].length);
+
+                    let nextSymbol = new vscode.DocumentSymbol(
+                        matches[1].trim(), 
+                        typeInterface,
+                        vscode.SymbolKind.Interface,
+                        line.range,
+                        line.range
+                    );
+                    symbol.children.push(nextSymbol);
+                }
+            } while(matches);
+            matches = regexToken.exec(lineContext);
+            if (matches) {
+                console.log(matches[0]);
+            }
+        }
+    });
 }
