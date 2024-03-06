@@ -7,15 +7,20 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 interface ITextBlockObj {
-    context: string[];
-    rangeStart: vscode.Range;
-    rangeStop: vscode.Range;
+    line: LineObj[];
 }
 
 class TextBlockObj implements ITextBlockObj {
-    public context: string[] = [];
-    public rangeStart: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
-    public rangeStop: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+    public line: LineObj[] = [];
+}
+
+class LineObj {
+    public context: string = '';
+    public range: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+    constructor( context:string, range: vscode.Range){
+        this.context = context;
+        this.range = range;
+    }
 }
 
 function organize(document: vscode.TextDocument) {
@@ -80,8 +85,6 @@ function organize(document: vscode.TextDocument) {
 
             // Determine whether to add to the temporary block.
             if (!textBlockStatus) {
-                tmpTextBlock.rangeStart = lineRange;
-                tmpTextBlock.rangeStop = lineRange;
                 const matchesModuleStart = regexModuleStart.exec(line);
                 if (matchesModuleStart) textBlockStatus = true;
             } else {
@@ -93,11 +96,10 @@ function organize(document: vscode.TextDocument) {
 
             if (line.length > 0) {
                 if (textBlockStatus) {
-                    tmpTextBlock.context.push(line);
+                    tmpTextBlock.line.push(new LineObj(line, lineRange));
                 }
                 else {
-                    tmpTextBlock.rangeStop = lineRange;
-                    tmpTextBlock.context.push(line);
+                    tmpTextBlock.line.push(new LineObj(line, lineRange));
                     textBlocks.push(tmpTextBlock);
                     tmpTextBlock = new TextBlockObj();
                 }
@@ -121,41 +123,43 @@ class DocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             const regexModule = /^module\s+([^\s(]*)/;
 
             textBlocks.forEach(textBlock => {
-                matches = regexDefine.exec(textBlock.context[0]);
+                matches = regexDefine.exec(textBlock.line[0].context);
                 if (matches) {
                     let symbol = new vscode.DocumentSymbol(
                         matches[1], 
                         'define',
                         vscode.SymbolKind.Constant,
-                        textBlock.rangeStart,
-                        textBlock.rangeStart
+                        textBlock.line[0].range,
+                        textBlock.line[0].range
                     );
                     symbols.push(symbol);
                     return;
                 }
 
-                matches = regexInclude.exec(textBlock.context[0]);
+                matches = regexInclude.exec(textBlock.line[0].context);
                 if (matches) {
                     let symbol = new vscode.DocumentSymbol(
                         matches[1], 
                         'include',
                         vscode.SymbolKind.File,
-                        textBlock.rangeStart,
-                        textBlock.rangeStart
+                        textBlock.line[0].range,
+                        textBlock.line[0].range
                     );
                     symbols.push(symbol);
                     return;
                 }
 
-                matches = regexModule.exec(textBlock.context[0]);
+                matches = regexModule.exec(textBlock.line[0].context);
                 if (matches) {
                     let symbol = new vscode.DocumentSymbol(
                         matches[1], 
                         'module',
-                        vscode.SymbolKind.File,
-                        textBlock.rangeStart,
-                        textBlock.rangeStart
+                        vscode.SymbolKind.Module,
+                        textBlock.line[0].range,
+                        textBlock.line[0].range
                     );
+                    
+                    // symbol.children.push()
                     symbols.push(symbol);
                     return;
                 }
