@@ -1,100 +1,167 @@
 import * as vscode from 'vscode';
-
-const tokenTypes = new Map<string, number>();
-const tokenModifiers = new Map<string, number>();
-
-const legend = (function () {
-    const tokenTypesLegend = [
-        'comment', 'string', 'keyword', 'number', 'regexp', 'operator', 'namespace',
-        'type', 'struct', 'class', 'interface', 'enum', 'typeParameter', 'function',
-        'method', 'macro', 'variable', 'parameter', 'property', 'label', 'title'
-    ];
-    tokenTypesLegend.forEach((tokenType, index) => tokenTypes.set(tokenType, index));
-
-    const tokenModifiersLegend = [
-        'declaration', 'documentation', 'readonly', 'static', 'abstract', 'deprecated',
-        'modification', 'async'
-    ];
-    tokenModifiersLegend.forEach((tokenModifier, index) => tokenModifiers.set(tokenModifier, index));
-
-    return new vscode.SemanticTokensLegend(tokenTypesLegend, tokenModifiersLegend);
-})();
-
 export function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.languages.registerDocumentSemanticTokensProvider({ language: 'verilog-ams'}, new DocumentSemanticTokensProvider(), legend));
+    
+    // Use the console to output diagnostic information (console.log) and errors (console.error)
+    // This line of code will only be executed once when your extension is activated
+    context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({language: "verilog-a" }, new DocumentSymbolProvider()));
 }
 
-interface IParsedToken {
-    line: number;
-    startCharacter: number;
-    length: number;
-    tokenType: string;
-    tokenModifiers: string[];
+interface ITextBlockObj {
+    context: string[];
+    rangeStart: vscode.Range;
+    rangeStop: vscode.Range;
 }
 
-class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensProvider {
-    async provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SemanticTokens> {
-        const allTokens = this._parseText(document.getText());
-        const builder = new vscode.SemanticTokensBuilder();
-        allTokens.forEach((token) => {
-            builder.push(token.line, token.startCharacter, token.length, this._encodeTokenType(token.tokenType), this._encodeTokenModifiers(token.tokenModifiers));
+class TextBlockObj implements ITextBlockObj {
+    public context: string[] = [];
+    public rangeStart: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+    public rangeStop: vscode.Range = new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0));
+}
+
+function organize(document: vscode.TextDocument) {
+    var textBlocks = new Array<TextBlockObj>();
+    var tmpTextBlock = new TextBlockObj();
+    var annotationStatus = -1;
+    var matchSingle = true;
+    var matchMultiple = true;
+    var textBlockStatus = false;
+
+
+    const regexMultiAnnotationStart = /\s*\/\*/;
+    const regexMultiAnnotationEnd = /\*\/\s*/;
+    const regexAnnotation = /\s*\/\//;
+    const regexModuleStart = /^module\s+/;
+    const regexModuleEnd = /^endmodule/;
+
+    for (var i = 0; i < document.lineCount; i++) {
+        var line = document.lineAt(i).text;
+        var lineRange = document.lineAt(i).range;
+
+        // Remove annotation context
+        if (annotationStatus < 0) {
+            const matchesSingle = regexAnnotation.exec(line);
+            const matchesMultiple = regexMultiAnnotationStart.exec(line);
+    
+            // Determine which annotation status to comply with
+            matchSingle = true;
+            matchMultiple = true;
+            if (matchesSingle && matchesMultiple) {
+                if (matchesSingle.index > matchesMultiple.index) matchSingle = false;
+                else matchMultiple = false;
+            }
+    
+            // Remove annotation content
+            if (matchesSingle && matchSingle) {
+                if (matchesSingle.index > 0) {
+                    line = line.substring(0, matchesSingle.index);
+                } else {
+                    line = '';
+                }
+            } else if (matchesMultiple && matchMultiple) {
+                annotationStatus = i;
+                if (matchesMultiple.index > 0) {
+                    line = line.substring(0, matchesMultiple.index);
+                } else {
+                    line = '';
+                }
+            }
+        } else {
+            const matchesMultiple = regexMultiAnnotationEnd.exec(line);
+            if (matchesMultiple) {
+                annotationStatus = -1;
+                line = line.substring(matchesMultiple.index + matchesMultiple.length + 1);
+            }
+        }
+
+        // Keep non-annotated content
+        if (annotationStatus < 0 || annotationStatus == i) {
+            // Remove extra whitespace characters
+            line = line.trim();
+
+            // Determine whether to add to the temporary block.
+            if (!textBlockStatus) {
+                tmpTextBlock.rangeStart = lineRange;
+                tmpTextBlock.rangeStop = lineRange;
+                const matchesModuleStart = regexModuleStart.exec(line);
+                if (matchesModuleStart) textBlockStatus = true;
+            } else {
+                const matchesModuleEnd = regexModuleEnd.exec(line);
+                if (matchesModuleEnd) {
+                    textBlockStatus = false;
+                }
+            }
+
+            if (line.length > 0) {
+                if (textBlockStatus) {
+                    tmpTextBlock.context.push(line);
+                }
+                else {
+                    tmpTextBlock.rangeStop = lineRange;
+                    tmpTextBlock.context.push(line);
+                    textBlocks.push(tmpTextBlock);
+                    tmpTextBlock = new TextBlockObj();
+                }
+            }
+        }
+    }
+    return textBlocks;
+}
+
+class DocumentSymbolProvider implements vscode.DocumentSymbolProvider {   
+    public provideDocumentSymbols(
+        document: vscode.TextDocument,
+        token: vscode.CancellationToken): Promise<vscode.DocumentSymbol[]> {
+        return new Promise((resolve, reject) => {
+            let symbols: vscode.DocumentSymbol[] = [];
+            const textBlocks = organize(document);
+            
+            var matches: RegExpExecArray | null;
+            const regexDefine = /^`define\s+([^\s]*)/;
+            const regexInclude = /^`include\s+\"([^\s]*)\"/;
+            const regexModule = /^module\s+([^\s(]*)/;
+
+            textBlocks.forEach(textBlock => {
+                matches = regexDefine.exec(textBlock.context[0]);
+                if (matches) {
+                    let symbol = new vscode.DocumentSymbol(
+                        matches[1], 
+                        'define',
+                        vscode.SymbolKind.Constant,
+                        textBlock.rangeStart,
+                        textBlock.rangeStart
+                    );
+                    symbols.push(symbol);
+                    return;
+                }
+
+                matches = regexInclude.exec(textBlock.context[0]);
+                if (matches) {
+                    let symbol = new vscode.DocumentSymbol(
+                        matches[1], 
+                        'include',
+                        vscode.SymbolKind.File,
+                        textBlock.rangeStart,
+                        textBlock.rangeStart
+                    );
+                    symbols.push(symbol);
+                    return;
+                }
+
+                matches = regexModule.exec(textBlock.context[0]);
+                if (matches) {
+                    let symbol = new vscode.DocumentSymbol(
+                        matches[1], 
+                        'module',
+                        vscode.SymbolKind.File,
+                        textBlock.rangeStart,
+                        textBlock.rangeStart
+                    );
+                    symbols.push(symbol);
+                    return;
+                }
+                
+            });
+            resolve(symbols);
         });
-        return builder.build();
-    }
-
-    private _encodeTokenType(tokenType: string): number {
-        if (tokenTypes.has(tokenType)) {
-            return tokenTypes.get(tokenType)!;
-        } else if (tokenType === 'notInLegend') {
-            return tokenTypes.size + 2;
-        }
-        return 0;
-    }
-
-    private _encodeTokenModifiers(strTokenModifiers: string[]): number {
-        let result = 0;
-        for (let i = 0; i < strTokenModifiers.length; i++) {
-            const tokenModifier = strTokenModifiers[i];
-            if (tokenModifiers.has(tokenModifier)) {
-                result = result | (1 << tokenModifiers.get(tokenModifier)!);
-            } else if (tokenModifier === 'notInLegend') {
-                result = result | (1 << tokenModifiers.size + 2);
-            }
-        }
-        return result;
-    }
-
-    private _parseText(text: string): IParsedToken[] {
-        const r: IParsedToken[] = [];
-        const lines = text.split(/\r\n|\r|\n/);
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            let tokenData: { tokenType: string; tokenModifiers: string[]; } = { tokenType: "", tokenModifiers: [""] };
-            let openOffset = -1;
-            let closeOffset = -1;
-            if (i == 0) {
-                tokenData = this._parseTextToken("title.documentation:verilog-ams");
-                closeOffset = line.length;
-            }
-            if (closeOffset > -1)
-            {
-                r.push({
-                    line: i,
-                    startCharacter: openOffset + 1,
-                    length: closeOffset - openOffset - 1,
-                    tokenType: tokenData.tokenType,
-                    tokenModifiers: tokenData.tokenModifiers
-                });
-            }
-        }
-        return r;
-    }
-
-    private _parseTextToken(text: string): { tokenType: string; tokenModifiers: string[]; } {
-        const parts = text.split('.');
-        return {
-            tokenType: parts[0],
-            tokenModifiers: parts.slice(1)
-        };
-    }
+    }    
 }
