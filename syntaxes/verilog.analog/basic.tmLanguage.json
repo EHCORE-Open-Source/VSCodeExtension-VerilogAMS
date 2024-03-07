@@ -113,15 +113,35 @@
             "patterns": [
                 {
                     "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
-                    "match": "(^|[\\s;])(module)(\\s+([[:word:]][[:word:]$]*))?",
-                    "captures": {
+                    "begin": "(^|[\\s;])(module)(\\s+([[:word:]][[:word:]$]*))?",
+                    "beginCaptures": {
                         "2": {
                             "name": "keyword.other.verilog.analog.basic"
                         },
                         "4": {
                             "name": "strong.verilog.analog.basic"
                         }
-                    }
+                    },
+                    "end": "(endmodule)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.other.verilog.analog.basic"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#strings"
+                        },
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#keyword"
+                        }
+                    ]
                 },
                 {
                     "comment": "built-in functions",
