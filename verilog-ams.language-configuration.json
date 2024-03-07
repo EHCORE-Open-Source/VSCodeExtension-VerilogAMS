@@ -37,5 +37,19 @@
             "start": "[//]\\s?#region",
             "end": "[//]\\s?#endregion"
         }
-    }
+    },
+    "colorizedBracketPairs": [
+        [
+            "(",
+            ")"
+        ],
+        [
+            "[",
+            "]"
+        ],
+        [
+            "{",
+            "}"
+        ]
+    ]
 }
