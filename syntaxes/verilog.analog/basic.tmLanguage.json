@@ -50,12 +50,54 @@
                 }
             ]
         },
+        "parameter": {
+            "patterns": [
+                {
+                    "comment": "parameter block definition",
+                    "begin": "\\b(parameter)\\b\\s*(integer|real|string)?",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.verilog.analog.parameter"
+                        },
+                        "2": {
+                            "name": "keyword.other.verilog.analog.parameter"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "match": "\\b(?:from)\\b",
+                            "name": "keyword.control.verilog.analog.parameter.range"
+                        },
+                        {
+                            "comment": "valid range definition",
+                            "name": "strong.verilog.analog.parameter.range",
+                            "begin": "[\\[(]",
+                            "end": "[\\])]",
+                            "captures": {
+                                "0": {
+                                    "name": "string.interpolated.verilog.analog.parameter.range"
+                                }
+                            },
+                            "patterns": [
+                                {
+                                    "include": "#numeric"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
         "numeric": {
             "patterns": [
                 {
                     "comment": "numeric for scientific or symbol notation",
                     "name": "constant.numeric.verilog.analog.basic",
-                    "match": "(^|[;=\\s])[+-]?[0-9_]+(\\.[0-9_]+)?([eE][+-]?[0-9_]+|[TGMKkmunpfa])?($|[;\\s])"
+                    "match": "\\b[+-]?[0-9_]+(\\.[0-9_]+)?([eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
                 }
             ]
         },
@@ -167,13 +209,16 @@
                     },
                     "patterns": [
                         {
-                            "include": "#strings"
-                        },
-                        {
                             "include": "#comment"
                         },
                         {
+                            "include": "#strings"
+                        },
+                        {
                             "include": "#numeric"
+                        },
+                        {
+                            "include": "#parameter"
                         },
                         {
                             "include": "#keyword"
