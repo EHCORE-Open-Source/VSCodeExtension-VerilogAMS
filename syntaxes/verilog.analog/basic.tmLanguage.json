@@ -47,13 +47,34 @@
             "patterns": [
                 {
                     "comment": "double quotes",
-                    "name": "string.quoted.double.verilog.analog.basic strong.verilog.analog.basic",
+                    "name": "string.quoted.double.verilog.analog.basic",
                     "begin": "\\\"", 
                     "end": "\\\"",
 		            "patterns": [
                         {
-                            "name": "constant.character.escape.verilog.analog.basic",
-                            "match": "\\\\([nt\\x5C\\x22]|[01]?[0-7]{1,2})"
+                            "comment": "white space characters",
+                            "name": "constant.character.escape.verilog.analog.basic strong.verilog.analog.escape",
+                            "match": "\\\\[nt]"
+                        },
+                        {
+                            "comment": "special characters",
+                            "name": "constant.character.escape.verilog.analog.special",
+                            "match": "\\\\[\"\\\\]"
+                        },
+                        {
+                            "comment": "octal characters for ASCII",
+                            "name": "constant.character.escape.verilog.analog.octal",
+                            "match": "\\\\(?:[01][0-7]{2}|[0-7]{1,2}(?=[^0-7]))"
+                        },
+                        {
+                            "comment": "common input format specifications",
+                            "name": "support.variable.verilog.analog.input.specification",
+                            "match": "(?<=\\$[fs]scanf\\([^)]*)\\%[[:digit:]]*(?i)[dobcsmfegr]"
+                        },
+                        {
+                            "comment": "common output format specifications",
+                            "name": "support.variable.verilog.analog.output.specification",
+                            "match": "(?<=\\$sformat\\([^)]*)\\%(?:(?i)[clm]|[[:digit:]]*[hdobs]|(?:-?[[:digit:]]*\\.[[:digit:]]+)?[fegr])"
                         }
                     ]
                      	
