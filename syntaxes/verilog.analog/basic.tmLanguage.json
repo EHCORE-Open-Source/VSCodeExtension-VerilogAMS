@@ -3,10 +3,10 @@
     "scopeName": "source.verilog.analog.basic",
     "patterns": [
         {
-            "include": "#strings"
+            "include": "#comment"
         },
         {
-            "include": "#comment"
+            "include": "#strings"
         },
         {
             "include": "#numeric"
@@ -25,12 +25,28 @@
                     "comment": "block comment",
                     "name": "comment.block.verilog.analog.basic",
                     "begin": "/\\*",
-                    "end": "\\*/"
+                    "end": "\\*/",
+                    "patterns": [
+                        {
+                            "match": "\\b(TODO)\\b",
+                            "name": "markup.bold.verilog.analog.basic"
+                        }
+                    ]
                 },
                 {
                     "comment": "line comment",
                     "name": "comment.line.verilog.analog.basic",
-                    "match": "//.*"
+                    "match": "//(.*)",
+                    "captures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "match": "\\b(TODO)\\b",
+                                    "name": "markup.bold.verilog.analog.basic"
+                                }
+                            ]
+                        }
+                    }
                 }
             ]
         },
