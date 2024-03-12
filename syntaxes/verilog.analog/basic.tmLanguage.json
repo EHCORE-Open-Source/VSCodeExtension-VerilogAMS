@@ -231,12 +231,6 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#parameter_range"
-                        },
-                        {
-                            "include": "#parameter_keyword"
-                        },
-                        {
                             "include": "#comment"
                         },
                         {
@@ -244,6 +238,15 @@
                         },
                         {
                             "include": "#numeric"
+                        },
+                        {
+                            "include": "#parameter_range"
+                        },
+                        {
+                            "include": "#parameter_keyword"
+                        },
+                        {
+                            "include": "#math_function"
                         }
                     ]
                 }
@@ -276,7 +279,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#function"
+                            "include": "#math_function"
                         },
                         {
                             "include": "#definition"
@@ -360,6 +363,33 @@
                             "name": "variable.verilog.analog.port"
                         }
                     }
+                }
+            ]
+        },
+        "math_function": {
+            "patterns": [
+                {
+                    "begin": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.name.function.verilog.analog.math"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#math_function"
+                        }
+                    ]
                 }
             ]
         },
