@@ -169,6 +169,18 @@
                     "end": "\\b(?:end)\\b",
                     "patterns": [
                         {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#strings"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
                             "include": "#status"
                         },
                         {
@@ -354,12 +366,15 @@
         "port_attribute": {
             "patterns": [
                 {
-                    "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*\\)",
+                    "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
                     "captures": {
                         "1": {
                             "name": "strong.verilog.analog.port.attribute"
                         },
                         "2": {
+                            "name": "variable.verilog.analog.port"
+                        },
+                        "3": {
                             "name": "variable.verilog.analog.port"
                         }
                     }
