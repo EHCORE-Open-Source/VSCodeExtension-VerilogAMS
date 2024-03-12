@@ -150,6 +150,9 @@
                             "include": "#keyword"
                         },
                         {
+                            "include": "#port_attribute"
+                        },
+                        {
                             "include": "#function"
                         },
                         {
@@ -292,6 +295,21 @@
                 }
             ]
         },
+        "port_attribute": {
+            "patterns": [
+                {
+                    "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*\\)",
+                    "captures": {
+                        "1": {
+                            "name": "strong.verilog.analog.port.attribute"
+                        },
+                        "2": {
+                            "name": "variable.verilog.analog.port"
+                        }
+                    }
+                }
+            ]
+        },
         "function": {
             "patterns": [
                 {
@@ -368,7 +386,7 @@
                 {
                     "comment": "built-in functions",
                     "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|temperature|warning|write)\\b",
-                    "name": "entity.name.function.basic",
+                    "name": "support.class.verilog.basic",
                     "captures": {
                         "0": {
                             "name": "support.class.verilog.basic strong.verilog.analog.basic"
@@ -378,7 +396,7 @@
                 {
                     "comment": "flushing output",
                     "match": "\\$(fflush)\\b",
-                    "name": "entity.name.function.basic",
+                    "name": "support.class.verilog.basic",
                     "captures": {
                         "0": {
                             "name": "strong.verilog.analog.basic"
@@ -388,7 +406,7 @@
                 {
                     "comment": "formatting data from/to a string",
                     "match": "\\$(s(format|scanf|write))\\b",
-                    "name": "entity.name.function.basic",
+                    "name": "support.class.verilog.basic",
                     "captures": {
                         "0": {
                             "name": "strong.verilog.analog.basic"
@@ -398,7 +416,7 @@
                 {
                     "comment": "file system",
                     "match": "\\$(f(open|close|gets))\\b",
-                    "name": "entity.name.function.basic",
+                    "name": "support.class.verilog.basic",
                     "captures": {
                         "0": {
                             "name": "strong.verilog.analog.basic"
