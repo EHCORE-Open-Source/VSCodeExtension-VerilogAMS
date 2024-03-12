@@ -147,7 +147,32 @@
                             "include": "#parameter"
                         },
                         {
-                            "include": "#keyword"
+                            "include": "#top_scription_keyword"
+                        },
+                        {
+                            "include": "#analog_block"
+                        }
+                    ]
+                }
+            ]
+        },
+        "analog_block": {
+            "patterns": [
+                {
+                    "comment": "analog block",
+                    "begin": "\\b(analog)\\s+(?:begin)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.verilog.analog.block"
+                        }
+                    },
+                    "end": "\\b(?:end)\\b",
+                    "patterns": [
+                        {
+                            "include": "#status"
+                        },
+                        {
+                            "include": "#analog_keyword"
                         },
                         {
                             "include": "#port_attribute"
@@ -159,6 +184,34 @@
                             "include": "#system_function"
                         }
                     ]
+                }
+            ]
+        },
+        "status": {
+            "patterns": [
+                {
+                    "begin": "(@)\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "support.type.verilog.analog.status"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#status_keyword"
+                        }
+                    ],
+                    "name": "markup.underline"
+                }
+            ]
+        },
+        "status_keyword": {
+            "patterns": [
+                {
+                    "comment": "analog event expression",
+                    "match": "\\b(?:cross|(?:final|initial)_step)\\b",
+                    "name": "entity.name.function"
                 }
             ]
         },
@@ -252,7 +305,7 @@
                 }
             ]
         },
-        "keyword": {
+        "top_scription_keyword": {
             "patterns": [
                 {
                     "comment": "port declaration",
@@ -265,10 +318,14 @@
                     "match": "\\b(?:integer|real|string)\\b"
                 },
                 {
-                    "comment": "analog module",
-                    "name": "keyword.other.verilog.analog.building",
-                    "match": "\\b(?:analog)\\b"
-                },
+                    "comment": "electrical declaration",
+                    "name": "keyword.signal.verilog.analog.type",
+                    "match": "\\b(current|electrical|voltage)\\b"
+                }
+            ]
+        },
+        "analog_keyword": {
+            "patterns": [
                 {
                     "comment": "if-else",
                     "name": "keyword.control.verilog.analog.basic",
@@ -288,10 +345,6 @@
                     "comment": "begin-end",
                     "name": "keyword.control.verilog.analog.basic",
                     "match": "\\b(begin|end)\\b"
-                },
-                {
-                    "name": "keyword.signal.verilog.analog.basic",
-                    "match": "\\b(current|electrical|voltage)\\b"
                 }
             ]
         },
@@ -319,9 +372,6 @@
                             "patterns": [
                                 {
                                     "include": "#function_name"
-                                },
-                                {
-                                    "include": "#keyword"
                                 }
                             ]
                         }
