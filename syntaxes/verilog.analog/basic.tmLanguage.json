@@ -545,6 +545,26 @@
                     }
                 }
             ]
+        },
+        "operator": {
+            "patterns": [
+                {
+                    "comment": "unary_operator ::= + | - | ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
+                    "name": "keyword.operator.verilog.analog.operator.unary strong.verilog.analog.operator.unary"
+                },
+                {
+                    "comment": "binary_operator ::= + | - | * | / | % | == | != | === | !== | && | || | ** | < | <= | > | >= | & | | | ^ | ^~ | ~^ | >> | << | >>> | <<<",
+                    "name": "keyword.operator.verilog.analog.operator.binary strong.verilog.analog.operator.binary"
+                },
+                {
+                    "comment": "unary_module_path_operator ::= ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
+                    "name": "keyword.operator.verilog.analog.operator.unary_module strong.verilog.analog.operator.unary_module"
+                },
+                {
+                    "comment": "binary_module_path_operator ::= == | != | && | || | & | | | ^ | ^~ | ~^",
+                    "name": "keyword.operator.verilog.analog.operator.binary_module strong.verilog.analog.operator.binary_module"
+                }
+            ]
         }
     }
 }
