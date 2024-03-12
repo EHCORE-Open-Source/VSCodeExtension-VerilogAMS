@@ -16,6 +16,11 @@
                 {
                     "name": "keyword.other.verilog.analog.mixedsignal",
                     "match": "\\b(connect(module|rules)?|driver_update|edge|end(connectrules)?|merged|net_resolution|resolveto|split|wreal)\\b"
+                },
+                {
+                    "comment": "compiler directives (others)",
+                    "match": "^\\s*(`(begin_keywords|(end)?celldefine|default\\_(discipline|nettype|transition)|else|elsif|end\\_keywords|endif|(ifn?|un)def|include|line|(noun|un)connected\\_drive|pragma|resetall|timescale|))\\s*([[:word:]]*)\\b",
+                    "name": "keyword.control.verilog.analog.basic"
                 }
             ]
         }
