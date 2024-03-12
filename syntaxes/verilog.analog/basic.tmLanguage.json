@@ -342,6 +342,37 @@
         "analog_keyword": {
             "patterns": [
                 {
+                    "begin": "\\b(begin)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.verilog.analog.basic"
+                        }
+                    },
+                    "end": "\\b(end)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control.verilog.analog.basic"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#strings"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#analog_keyword"
+                        }
+                    ]
+                },
+                {
                     "comment": "if-else",
                     "name": "keyword.control.verilog.analog.basic",
                     "match": "\\b(if|else|for)\\b"
@@ -355,11 +386,6 @@
                     "comment": "loop",
                     "name": "keyword.control.verilog.analog.basic",
                     "match": "\\b(for|repeat)\\b"
-                },
-                {
-                    "comment": "begin-end",
-                    "name": "keyword.control.verilog.analog.basic",
-                    "match": "\\b(begin|end)\\b"
                 }
             ]
         },
