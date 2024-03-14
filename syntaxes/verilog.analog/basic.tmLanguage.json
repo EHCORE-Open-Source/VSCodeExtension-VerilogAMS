@@ -181,6 +181,9 @@
                             "include": "#property"
                         },
                         {
+                            "include": "#variable"
+                        },
+                        {
                             "include": "#block"
                         }
                     ]
@@ -391,14 +394,59 @@
             "patterns": [
                 {
                     "comment": "port declaration",
-                    "match": "\\b(?:in[op]ut|output)\\b",
-                    "name": "keyword.other.va.port.direction"
+                    "begin": "\\b(?:in[op]ut|output)\\b",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "keyword.other.va.port.direction"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#portname"
+                        }
+                    ]
                 },
                 {
                     "comment": "electrical declaration",
-                    "name": "keyword.signal.va.type",
-                    "match": "\\b(current|electrical|voltage)\\b"
-                },
+                    "begin": "\\b(?:current|electrical|voltage)\\b",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "keyword.other.va.port.type"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#portname"
+                        }
+                    ]
+                    
+                }
+            ]
+        },
+        "portname": {
+            "patterns": [
+                {
+                    "match": "\\b([[:word:]][[:word:]$]*)\\b",
+                    "name": "variable.va.port"
+                }
+            ]
+        },
+        "variable": {
+            "patterns": [
                 {
                     "comment": "data type declaration",
                     "name": "keyword.other.va.datatype",
