@@ -227,7 +227,7 @@
             "patterns": [
                 {
                     "comment": "analog event expression",
-                    "match": "\\b(?:cross|(?:final|initial)_step|timer)\\b",
+                    "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
                     "name": "entity.name.function"
                 }
             ]
