@@ -45,7 +45,7 @@
                         "1": {
                             "patterns": [
                                 {
-                                    "comment": "Reinforcement of items to be completed",
+                                    "comment": "reinforcement of items to be completed",
                                     "match": "\\b(?:TODO)\\b",
                                     "name": "markup.bold.va.comment.todo"
                                 }
@@ -124,7 +124,7 @@
                     "name": "keyword.other.va.module"
                 },
                 {
-                    "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
+                    "comment": "(Verilog-AMS LRM version 2.4 [see 2.8]) simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
                     "begin": "(?<=\\b(?:module)\\s+)([[:word:]][[:word:]$]*)?",
                     "beginCaptures": {
                         "1": {
