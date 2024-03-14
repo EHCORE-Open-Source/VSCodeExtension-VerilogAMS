@@ -45,8 +45,9 @@
                         "1": {
                             "patterns": [
                                 {
+                                    "comment": "Reinforcement of items to be completed",
                                     "match": "\\b(?:TODO)\\b",
-                                    "name": "markup.bold.va"
+                                    "name": "markup.bold.va.comment.todo"
                                 }
                             ]
                         }
