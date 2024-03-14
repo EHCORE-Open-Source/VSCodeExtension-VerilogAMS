@@ -20,26 +20,26 @@
             "patterns": [
                 {
                     "comment": "block comment",
-                    "name": "comment.block.verilog.analog.basic",
+                    "name": "comment.block.va",
                     "begin": "/\\*",
                     "end": "\\*/",
                     "patterns": [
                         {
                             "match": "\\b(TODO)\\b",
-                            "name": "markup.bold.verilog.analog.basic"
+                            "name": "markup.bold.va"
                         }
                     ]
                 },
                 {
                     "comment": "line comment",
-                    "name": "comment.line.verilog.analog.basic",
+                    "name": "comment.line.va",
                     "match": "//(.*)",
                     "captures": {
                         "1": {
                             "patterns": [
                                 {
                                     "match": "\\b(TODO)\\b",
-                                    "name": "markup.bold.verilog.analog.basic"
+                                    "name": "markup.bold.va"
                                 }
                             ]
                         }
@@ -51,7 +51,7 @@
             "patterns": [
                 {
                     "comment": "numeric for scientific or symbol notation",
-                    "name": "constant.numeric.verilog.analog.basic",
+                    "name": "constant.numeric.va",
                     "match": "\\b[+-]?[0-9_]+(\\.[0-9_]+)?([eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
                 }
             ]
@@ -60,33 +60,33 @@
             "patterns": [
                 {
                     "comment": "double quotes",
-                    "name": "string.quoted.double.verilog.analog.basic",
+                    "name": "string.quoted.double.va",
                     "begin": "\\\"", 
                     "end": "\\\"",
 		            "patterns": [
                         {
                             "comment": "white space characters",
-                            "name": "constant.character.escape.verilog.analog.basic strong.verilog.analog.escape",
+                            "name": "constant.character.escape.va strong.va.escape",
                             "match": "\\\\[nt]"
                         },
                         {
                             "comment": "special characters",
-                            "name": "constant.character.escape.verilog.analog.special",
+                            "name": "constant.character.escape.va.special",
                             "match": "\\\\[\"\\\\]"
                         },
                         {
                             "comment": "octal characters for ASCII",
-                            "name": "constant.character.escape.verilog.analog.octal",
+                            "name": "constant.character.escape.va.octal",
                             "match": "\\\\(?:[01][0-7]{2}|[0-7]{1,2}(?=[^0-7]))"
                         },
                         {
                             "comment": "common input format specifications",
-                            "name": "support.variable.verilog.analog.input.specification",
+                            "name": "support.variable.va.input.specification",
                             "match": "(?<=\\$[fs]scanf\\([^)]*)\\%[[:digit:]]*(?i)[dobcsmfegr]"
                         },
                         {
                             "comment": "common output format specifications",
-                            "name": "support.variable.verilog.analog.output.specification",
+                            "name": "support.variable.va.output.specification",
                             "match": "(?<=\\$sformat\\([^)]*)\\%(?:(?i)[clm]|[[:digit:]]*[hdobs]|(?:-?[[:digit:]]*\\.[[:digit:]]+)?[fegr])"
                         }
                     ]
@@ -101,33 +101,33 @@
                     "match": "^\\s*(`define)\\s*([[:word:]]*)\\b",
                     "captures": {
                         "1": {
-                            "name": "keyword.control.verilog.analog.basic"
+                            "name": "keyword.control.va"
                         },
                         "2": {
-                            "name": "keyword.other.verilog.analog.basic"
+                            "name": "variable.other.constant.va"
                         }
                     }
                 },
                 {
                     "comment": "compiler directives (others)",
                     "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
-                    "name": "keyword.control.verilog.analog.basic"
+                    "name": "keyword.control.va"
                 },
                 {
                     "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
                     "begin": "(?:^|[\\s;])(module)(?:\\s+([[:word:]][[:word:]$]*))?",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.other.verilog.analog.basic"
+                            "name": "keyword.other.va"
                         },
                         "2": {
-                            "name": "entity.name.function.verilog.analog.basic strong.verilog.analog.basic"
+                            "name": "entity.name.function.va strong.va"
                         }
                     },
                     "end": "endmodule",
                     "endCaptures": {
                         "0": {
-                            "name": "keyword.other.verilog.analog.basic"
+                            "name": "keyword.other.va"
                         }
                     },
                     "patterns": [
@@ -163,7 +163,7 @@
                     "begin": "\\b(analog)\\s+(?:begin)\\b",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.other.verilog.analog.block"
+                            "name": "keyword.other.va.block"
                         }
                     },
                     "end": "\\b(?:end)\\b",
@@ -205,7 +205,7 @@
                     "begin": "(@)\\(",
                     "beginCaptures": {
                         "1": {
-                            "name": "support.type.verilog.analog.status"
+                            "name": "support.type.va.status"
                         }
                     },
                     "end": "\\)",
@@ -222,7 +222,7 @@
             "patterns": [
                 {
                     "comment": "analog event expression",
-                    "match": "\\b(?:cross|(?:final|initial)_step)\\b",
+                    "match": "\\b(?:cross|(?:final|initial)_step|timer)\\b",
                     "name": "entity.name.function"
                 }
             ]
@@ -234,10 +234,10 @@
                     "begin": "\\b(parameter)\\b\\s*(integer|real|string)?",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.other.verilog.analog.parameter"
+                            "name": "keyword.other.va.parameter"
                         },
                         "2": {
-                            "name": "keyword.other.verilog.analog.parameter"
+                            "name": "keyword.other.va.parameter"
                         }
                     },
                     "end": ";",
@@ -271,13 +271,13 @@
                     "begin": "(?<=\\b(?:from|exclude)\\s+)([\\[\\(])",
                     "beginCaptures": {
                         "1": {
-                            "name": "strong.verilog.analog.parameter.range comment.verilog.analog.parameter.range support.class.verilog.basic"
+                            "name": "strong.va.parameter.range comment.va.parameter.range support.class.verilog"
                         }
                     },
                     "end": "([\\]\\)])",
                     "endCaptures": {
                         "1": {
-                            "name": "strong.verilog.analog.parameter.range comment.verilog.analog.parameter.range support.class.verilog.basic"
+                            "name": "strong.va.parameter.range comment.va.parameter.range support.class.verilog"
                         }
                     },
                     "patterns": [
@@ -298,7 +298,7 @@
                         },
                         {
                             "match": "\\b(?:inf)\\b",
-                            "name": "keyword.other.verilog.analog.parameter.infinite"
+                            "name": "keyword.other.va.parameter.infinite"
                         }
                     ]
                 }
@@ -308,7 +308,7 @@
             "patterns": [
                 {
                     "match": "from|exclude",
-                    "name": "keyword.control.verilog.analog.parameterex"
+                    "name": "keyword.control.va.parameterex"
                 }
             ]
         },
@@ -316,7 +316,7 @@
             "patterns": [
                 {
                     "match": "`[[:word:]]*\\b",
-                    "name": "keyword.other.verilog.analog.definition strong.verilog.analog.definition"
+                    "name": "variable.other.constant.va.definition strong.va.definition"
                 }
             ]
         },
@@ -324,17 +324,17 @@
             "patterns": [
                 {
                     "comment": "port declaration",
-                    "name": "keyword.other.verilog.analog.port",
+                    "name": "keyword.other.va.port",
                     "match": "\\b(?:inout|input|output)\\b"
                 },
                 {
                     "comment": "data type declaration",
-                    "name": "keyword.other.verilog.analog.datatype",
+                    "name": "keyword.other.va.datatype",
                     "match": "\\b(?:integer|real|string)\\b"
                 },
                 {
                     "comment": "electrical declaration",
-                    "name": "keyword.signal.verilog.analog.type",
+                    "name": "keyword.signal.va.type",
                     "match": "\\b(current|electrical|voltage)\\b"
                 }
             ]
@@ -345,13 +345,13 @@
                     "begin": "\\b(begin)\\b",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.control.verilog.analog.basic"
+                            "name": "keyword.control.va"
                         }
                     },
                     "end": "\\b(end)\\b",
                     "endCaptures": {
                         "1": {
-                            "name": "keyword.control.verilog.analog.basic"
+                            "name": "keyword.control.va"
                         }
                     },
                     "patterns": [
@@ -369,22 +369,25 @@
                         },
                         {
                             "include": "#analog_keyword"
+                        },
+                        {
+                            "include": "#system_function"
                         }
                     ]
                 },
                 {
                     "comment": "if-else",
-                    "name": "keyword.control.verilog.analog.basic",
+                    "name": "keyword.control.va",
                     "match": "\\b(if|else|for)\\b"
                 },
                 {
                     "comment": "case",
-                    "name": "keyword.control.verilog.analog.basic",
+                    "name": "keyword.control.va",
                     "match": "\\b(case[xz]?|endcase)\\b"
                 },
                 {
                     "comment": "loop",
-                    "name": "keyword.control.verilog.analog.basic",
+                    "name": "keyword.control.va",
                     "match": "\\b(for|repeat)\\b"
                 }
             ]
@@ -395,13 +398,13 @@
                     "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
                     "captures": {
                         "1": {
-                            "name": "strong.verilog.analog.port.attribute"
+                            "name": "strong.va.port.attribute"
                         },
                         "2": {
-                            "name": "variable.verilog.analog.port"
+                            "name": "variable.va.port"
                         },
                         "3": {
-                            "name": "variable.verilog.analog.port"
+                            "name": "variable.va.port"
                         }
                     }
                 }
@@ -413,7 +416,7 @@
                     "begin": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\s*\\(",
                     "beginCaptures": {
                         "1": {
-                            "name": "entity.name.function.verilog.analog.math"
+                            "name": "entity.name.function.va.math"
                         }
                     },
                     "end": "\\)",
@@ -473,32 +476,32 @@
                 {
                     "comment": "analog built in functions",
                     "match": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\b",
-                    "name": "entity.name.function.verilog.analog.basic"
+                    "name": "entity.name.function.va"
                 },
                 {
                     "comment": "analysis function",
                     "match": "\\b(?:analysis)\\b",
-                    "name": "entity.name.function.verilog.analog.basic"
+                    "name": "entity.name.function.va"
                 },
                 {
                     "comment": "analog filter functions",
                     "match": "\\b(?:dd[tx]|idt(?:mod)?|absdelay|transition|slew|last_crossing|limexp)\\b",
-                    "name": "entity.name.function.verilog.analog.basic"
+                    "name": "entity.name.function.va"
                 },
                 {
                     "comment": "analog small signal functions",
                     "match": "\\b(?:ac_stim|(?:flicker|white)_noise|noise_table(?:_log)?)\\b",
-                    "name": "entity.name.function.verilog.analog.basic"
+                    "name": "entity.name.function.va"
                 },
                 {
                     "comment": "laplace or zi filter functions",
                     "match": "\\b(?:(?:laplace|zi)_[nz][pd])\\b",
-                    "name": "entity.name.function.verilog.analog.basic"
+                    "name": "entity.name.function.va"
                 },
                 {
                     "comment": "nature access functions",
                     "match": "\\b(?:potential|flow)\\b",
-                    "name": "entity.name.function.verilog.analog.basic"
+                    "name": "entity.name.function.va"
                 }
             ]
         },
@@ -507,40 +510,40 @@
                 {
                     "comment": "built-in functions",
                     "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|temperature|warning|write)\\b",
-                    "name": "support.class.verilog.basic",
+                    "name": "support.class.verilog",
                     "captures": {
                         "0": {
-                            "name": "support.class.verilog.basic strong.verilog.analog.basic"
+                            "name": "support.class.verilog strong.va"
                         }
                     }
                 },
                 {
                     "comment": "flushing output",
                     "match": "\\$(fflush)\\b",
-                    "name": "support.class.verilog.basic",
+                    "name": "support.class.verilog",
                     "captures": {
                         "0": {
-                            "name": "strong.verilog.analog.basic"
+                            "name": "strong.va"
                         }
                     }
                 },
                 {
                     "comment": "formatting data from/to a string",
                     "match": "\\$(s(format|scanf|write))\\b",
-                    "name": "support.class.verilog.basic",
+                    "name": "support.class.verilog",
                     "captures": {
                         "0": {
-                            "name": "strong.verilog.analog.basic"
+                            "name": "strong.va"
                         }
                     }
                 },
                 {
                     "comment": "file system",
                     "match": "\\$(f(open|close|gets))\\b",
-                    "name": "support.class.verilog.basic",
+                    "name": "support.class.verilog",
                     "captures": {
                         "0": {
-                            "name": "strong.verilog.analog.basic"
+                            "name": "strong.va"
                         }
                     }
                 }
@@ -550,19 +553,19 @@
             "patterns": [
                 {
                     "comment": "unary_operator ::= + | - | ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
-                    "name": "keyword.operator.verilog.analog.operator.unary strong.verilog.analog.operator.unary"
+                    "name": "keyword.operator.va.operator.unary strong.va.operator.unary"
                 },
                 {
                     "comment": "binary_operator ::= + | - | * | / | % | == | != | === | !== | && | || | ** | < | <= | > | >= | & | | | ^ | ^~ | ~^ | >> | << | >>> | <<<",
-                    "name": "keyword.operator.verilog.analog.operator.binary strong.verilog.analog.operator.binary"
+                    "name": "keyword.operator.va.operator.binary strong.va.operator.binary"
                 },
                 {
                     "comment": "unary_module_path_operator ::= ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
-                    "name": "keyword.operator.verilog.analog.operator.unary_module strong.verilog.analog.operator.unary_module"
+                    "name": "keyword.operator.va.operator.unary_module strong.va.operator.unary_module"
                 },
                 {
                     "comment": "binary_module_path_operator ::= == | != | && | || | & | | | ^ | ^~ | ~^",
-                    "name": "keyword.operator.verilog.analog.operator.binary_module strong.verilog.analog.operator.binary_module"
+                    "name": "keyword.operator.va.operator.binary_module strong.va.operator.binary_module"
                 }
             ]
         }
