@@ -120,23 +120,53 @@
         "package": {
             "patterns": [
                 {
-                    "match": "\\b(?:module)\\b",
-                    "name": "keyword.other.va.module"
-                },
-                {
                     "comment": "(Verilog-AMS LRM version 2.4 [see 2.8]) simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
-                    "begin": "(?<=\\b(?:module)\\s+)([[:word:]][[:word:]$]*)?",
+                    "begin": "\\b(module)\\s*([[:word:]][[:word:]$]*)?\\b",
                     "beginCaptures": {
                         "1": {
+                            "name": "keyword.other.va.module"
+                        },
+                        "2": {
                             "name": "entity.name.function.va.module strong.va.module"
                         }
                     },
-                    "end": "endmodule",
+                    "end": "\\b(?:endmodule)\\b",
                     "endCaptures": {
                         "0": {
                             "name": "keyword.other.va.module"
                         }
                     },
+                    "patterns": [
+                        {
+                            "include": "#module"
+                        }
+                    ]
+                }
+            ]
+        },
+        "module": {
+            "comment": "(Verilog-AMS LRM version 2.4 [see 2.8]) simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
+            "patterns": [
+                {
+                    "comment": "port enumeration",
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#port"
+                        }
+                    ]
+                },
+                {
+                    "comment": "module context",
+                    "begin": ";",
+                    "end": "(?=endmodule)",
                     "patterns": [
                         {
                             "include": "#basic"
@@ -154,6 +184,22 @@
                             "include": "#block"
                         }
                     ]
+                }
+            ]
+        },
+        "port": {
+            "patterns": [
+                {
+                    "match": "\\b(?:(in[op]ut|output)\\s+)?([[:word:]][[:word:]$]*)\\b",
+                    "name": "variable.va.port",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.va.port.direction"
+                        },
+                        "2": {
+                            "name": "strong.va.port"
+                        }
+                    }
                 }
             ]
         },
@@ -345,8 +391,8 @@
             "patterns": [
                 {
                     "comment": "port declaration",
-                    "name": "keyword.other.va.port",
-                    "match": "\\b(?:inout|input|output)\\b"
+                    "match": "\\b(?:in[op]ut|output)\\b",
+                    "name": "keyword.other.va.port.direction"
                 },
                 {
                     "comment": "electrical declaration",
