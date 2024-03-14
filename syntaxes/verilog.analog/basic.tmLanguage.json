@@ -3,19 +3,26 @@
     "scopeName": "source.verilog.analog.basic",
     "patterns": [
         {
-            "include": "#comment"
+            "include": "#miniset"
         },
         {
-            "include": "#strings"
-        },
-        {
-            "include": "#numeric"
-        },
-        {
-            "include": "#top_scription"
+            "include": "#context"
         }
     ],
     "repository": {
+        "miniset": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#numeric"
+                }
+            ]
+        },
         "comment": {
             "patterns": [
                 {
@@ -38,7 +45,7 @@
                         "1": {
                             "patterns": [
                                 {
-                                    "match": "\\b(TODO)\\b",
+                                    "match": "\\b(?:TODO)\\b",
                                     "name": "markup.bold.va"
                                 }
                             ]
@@ -57,7 +64,7 @@
                 {
                     "comment": "numeric for scientific or symbol notation",
                     "name": "constant.numeric.va",
-                    "match": "\\b[+-]?[0-9_]+(\\.[0-9_]+)?([eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
+                    "match": "(?:\\b|[+-])[0-9_]+(?:\\.[0-9_]+)?(?:[eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
                 }
             ]
         },
@@ -99,24 +106,10 @@
                 }
             ]
         },
-        "top_scription": {
+        "context": {
             "patterns": [
                 {
-                    "comment": "compiler directives (define)",
-                    "match": "^\\s*(`define)\\s*([[:word:]]*)\\b",
-                    "captures": {
-                        "1": {
-                            "name": "keyword.control.va"
-                        },
-                        "2": {
-                            "name": "variable.other.constant.va"
-                        }
-                    }
-                },
-                {
-                    "comment": "compiler directives (others)",
-                    "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
-                    "name": "keyword.control.va"
+                    "include": "#preprocess"
                 },
                 {
                     "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
@@ -137,13 +130,7 @@
                     },
                     "patterns": [
                         {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#strings"
-                        },
-                        {
-                            "include": "#numeric"
+                            "include": "#miniset"
                         },
                         {
                             "include": "#definition"
@@ -152,83 +139,122 @@
                             "include": "#parameter"
                         },
                         {
-                            "include": "#top_scription_keyword"
+                            "include": "#property"
                         },
                         {
-                            "include": "#analog_block"
+                            "include": "#block"
                         }
                     ]
                 }
             ]
         },
-        "analog_block": {
+        "preprocess": {
             "patterns": [
                 {
-                    "comment": "analog block",
-                    "begin": "\\b(analog)\\s+(?:begin)\\b",
-                    "beginCaptures": {
+                    "comment": "compiler directives (define)",
+                    "match": "^\\s*(`define)\\s*([[:word:]]*)\\b",
+                    "captures": {
                         "1": {
-                            "name": "keyword.other.va.block"
+                            "name": "keyword.control.va"
+                        },
+                        "2": {
+                            "name": "variable.other.constant.va"
                         }
-                    },
+                    }
+                },
+                {
+                    "comment": "compiler directives (others)",
+                    "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
+                    "name": "keyword.control.va"
+                },
+                {
+                    "include": "#definition"
+                }
+            ]
+        },
+        "block": {
+            "patterns": [
+                {
+                    "match": "\\b(?:analog)\\b",
+                    "name": "keyword.control.va.block strong.va.block"
+                },
+                {
+                    "comment": "analog block",
+                    "begin": "(?<=\\b(?:analog)\\s+)(?:begin)\\b",
                     "end": "\\b(?:end)\\b",
                     "patterns": [
                         {
-                            "include": "#comment"
+                            "include": "#trigger"
                         },
                         {
-                            "include": "#strings"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#status"
-                        },
-                        {
-                            "include": "#analog_keyword"
-                        },
-                        {
-                            "include": "#port_attribute"
-                        },
-                        {
-                            "include": "#function"
-                        },
-                        {
-                            "include": "#system_function"
+                            "include": "#normal"
                         }
                     ]
                 }
             ]
         },
-        "status": {
+        "normal": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#numeric"
+                },
+                {
+                    "include": "#definition"
+                },
+                {
+                    "include": "#keyword"
+                },
+                {
+                    "include": "#port_attribute"
+                },
+                {
+                    "include": "#function"
+                },
+                {
+                    "include": "#system_function"
+                }
+            ]
+        },
+        "trigger": {
             "patterns": [
                 {
                     "begin": "(@)\\(",
                     "beginCaptures": {
                         "1": {
-                            "name": "support.type.va.status"
+                            "name": "support.type.va.event strong.va.event"
                         }
                     },
                     "end": "\\)",
                     "patterns": [
                         {
-                            "include": "#status_keyword"
+                            "include": "#event"
                         }
-                    ],
-                    "name": "markup.underline"
+                    ]
                 }
             ]
         },
-        "status_keyword": {
+        "event": {
             "patterns": [
                 {
-                    "comment": "analog event expression",
+                    "comment": "analog event function",
                     "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
                     "name": "entity.name.function"
+                },
+                {
+                    "comment": "analog event parameter",
+                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)[\\(]",
+                    "end": "[\\)]",
+                    "patterns": [
+                        {
+                            "include": "#normal"
+                        }
+                    ]
                 }
             ]
         },
@@ -257,10 +283,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#parameter_range"
-                        },
-                        {
-                            "include": "#parameter_keyword"
+                            "include": "#collection"
                         },
                         {
                             "include": "#math_function"
@@ -269,20 +292,24 @@
                 }
             ]
         },
-        "parameter_range": {
+        "collection": {
             "patterns": [
+                {
+                    "match": "\\b(?:from|exclude)\\b",
+                    "name": "keyword.control.va.parameter.collection"
+                },
                 {
                     "comment": "valid range definition",
                     "begin": "(?<=\\b(?:from|exclude)\\s+)([\\[\\(])",
                     "beginCaptures": {
                         "1": {
-                            "name": "strong.va.parameter.range comment.va.parameter.range support.class.verilog"
+                            "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
                         }
                     },
                     "end": "([\\]\\)])",
                     "endCaptures": {
                         "1": {
-                            "name": "strong.va.parameter.range comment.va.parameter.range support.class.verilog"
+                            "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
                         }
                     },
                     "patterns": [
@@ -302,18 +329,10 @@
                             "include": "#definition"
                         },
                         {
-                            "match": "\\b(?:inf)\\b",
-                            "name": "keyword.other.va.parameter.infinite"
+                            "match": "(?:\\b|[+-])(?:inf)\\b",
+                            "name": "keyword.other.va.parameter.infinite variable.other.constant.va.parameter.infinite"
                         }
                     ]
-                }
-            ]
-        },
-        "parameter_keyword": {
-            "patterns": [
-                {
-                    "match": "from|exclude",
-                    "name": "keyword.control.va.parameterex"
                 }
             ]
         },
@@ -325,7 +344,7 @@
                 }
             ]
         },
-        "top_scription_keyword": {
+        "property": {
             "patterns": [
                 {
                     "comment": "port declaration",
@@ -344,7 +363,7 @@
                 }
             ]
         },
-        "analog_keyword": {
+        "keyword": {
             "patterns": [
                 {
                     "begin": "\\b(begin)\\b",
@@ -373,7 +392,7 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#analog_keyword"
+                            "include": "#keyword"
                         },
                         {
                             "include": "#system_function"
