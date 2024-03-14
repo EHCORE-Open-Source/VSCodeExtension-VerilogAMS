@@ -16,7 +16,7 @@
                     "include": "#comment"
                 },
                 {
-                    "include": "#strings"
+                    "include": "#string"
                 },
                 {
                     "include": "#numeric"
@@ -68,7 +68,7 @@
                 }
             ]
         },
-        "strings": {
+        "string": {
             "patterns": [
                 {
                     "comment": "double quotes",
@@ -313,7 +313,7 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#strings"
+                            "include": "#string"
                         },
                         {
                             "include": "#numeric"
@@ -379,7 +379,7 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#strings"
+                            "include": "#string"
                         },
                         {
                             "include": "#numeric"
@@ -476,7 +476,7 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#strings"
+                            "include": "#string"
                         },
                         {
                             "include": "#numeric"
