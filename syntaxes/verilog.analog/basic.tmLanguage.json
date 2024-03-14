@@ -112,20 +112,28 @@
                     "include": "#preprocess"
                 },
                 {
+                    "include": "#package"
+                }
+            ]
+        },
+        "package": {
+            "patterns": [
+                {
+                    "match": "\\b(?:module)\\b",
+                    "name": "keyword.other.va.module"
+                },
+                {
                     "comment": "(2.8) A simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
-                    "begin": "(?:^|[\\s;])(module)(?:\\s+([[:word:]][[:word:]$]*))?",
+                    "begin": "(?<=\\b(?:module)\\s+)([[:word:]][[:word:]$]*)?",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.other.va"
-                        },
-                        "2": {
-                            "name": "entity.name.function.va strong.va"
+                            "name": "entity.name.function.va.module strong.va.module"
                         }
                     },
                     "end": "endmodule",
                     "endCaptures": {
                         "0": {
-                            "name": "keyword.other.va"
+                            "name": "keyword.other.va.module"
                         }
                     },
                     "patterns": [
@@ -340,14 +348,14 @@
                     "match": "\\b(?:inout|input|output)\\b"
                 },
                 {
-                    "comment": "data type declaration",
-                    "name": "keyword.other.va.datatype",
-                    "match": "\\b(?:integer|real|string)\\b"
-                },
-                {
                     "comment": "electrical declaration",
                     "name": "keyword.signal.va.type",
                     "match": "\\b(current|electrical|voltage)\\b"
+                },
+                {
+                    "comment": "data type declaration",
+                    "name": "keyword.other.va.datatype",
+                    "match": "\\b(?:integer|real|string)\\b"
                 }
             ]
         },
