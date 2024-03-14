@@ -3,14 +3,14 @@
     "scopeName": "source.verilog.analog.basic",
     "patterns": [
         {
-            "include": "#miniset"
+            "include": "#basic"
         },
         {
             "include": "#context"
         }
     ],
     "repository": {
-        "miniset": {
+        "basic": {
             "patterns": [
                 {
                     "include": "#comment"
@@ -130,7 +130,7 @@
                     },
                     "patterns": [
                         {
-                            "include": "#miniset"
+                            "include": "#basic"
                         },
                         {
                             "include": "#definition"
@@ -196,13 +196,7 @@
         "normal": {
             "patterns": [
                 {
-                    "include": "#comment"
-                },
-                {
-                    "include": "#strings"
-                },
-                {
-                    "include": "#numeric"
+                    "include": "#basic"
                 },
                 {
                     "include": "#definition"
@@ -274,19 +268,13 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#strings"
-                        },
-                        {
-                            "include": "#numeric"
+                            "include": "#basic"
                         },
                         {
                             "include": "#collection"
                         },
                         {
-                            "include": "#math_function"
+                            "include": "#mathematics"
                         }
                     ]
                 }
@@ -323,7 +311,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#math_function"
+                            "include": "#mathematics"
                         },
                         {
                             "include": "#definition"
@@ -434,7 +422,7 @@
                 }
             ]
         },
-        "math_function": {
+        "mathematics": {
             "patterns": [
                 {
                     "begin": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\s*\\(",
@@ -455,7 +443,7 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#math_function"
+                            "include": "#mathematics"
                         }
                     ]
                 }
