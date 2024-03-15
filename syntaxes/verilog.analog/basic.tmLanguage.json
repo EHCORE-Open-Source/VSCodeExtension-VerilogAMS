@@ -294,7 +294,7 @@
                     "include": "#function"
                 },
                 {
-                    "include": "#system_function"
+                    "include": "#system"
                 }
             ]
         },
@@ -328,8 +328,8 @@
                 },
                 {
                     "comment": "analog event parameter",
-                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)[\\(]",
-                    "end": "[\\)]",
+                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)\\(",
+                    "end": "\\)",
                     "patterns": [
                         {
                             "include": "#normal"
@@ -520,6 +520,18 @@
         "keyword": {
             "patterns": [
                 {
+                    "begin": "(?<=\\b(?:if))\\s*\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#normal"
+                        },
+                        {
+                            "include": "#conditional_logic"
+                        }
+                    ]
+                },
+                {
                     "begin": "\\b(begin)\\b",
                     "beginCaptures": {
                         "1": {
@@ -552,6 +564,28 @@
                     "comment": "loop",
                     "name": "keyword.control.va",
                     "match": "\\b(for|repeat)\\b"
+                }
+            ]
+        },
+        "conditional_logic": {
+            "patterns": [
+                {
+                    "match": "[\\+\\-<>=!~&^|]+",
+                    "name": "invalid",
+                    "captures": {
+                        "0": {
+                            "patterns": [
+                                {
+                                    "match": "(?<=[[:word:]$\\s])(?:[<>!=]=|\\+{1,2}|\\-{1,2}|[<>|&])$",
+                                    "name": "keyword.operator.va.conditional.logic"
+                                },
+                                {
+                                    "match": "(?<=[[:word:]$\\s])(?:\\|\\||&&)$",
+                                    "name": "punctuation.definition.tag.logic"
+                                }
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -668,7 +702,7 @@
                 }
             ]
         },
-        "system_function": {
+        "system": {
             "patterns": [
                 {
                     "comment": "built-in functions",
@@ -709,6 +743,11 @@
                             "name": "strong.va"
                         }
                     }
+                },
+                {
+                    "comment": "unknown system function",
+                    "match": "(?<=[^[:word:]$])\\$[[:word:]$]*\\b",
+                    "name": "invalid.illegal.system.function"
                 }
             ]
         },
