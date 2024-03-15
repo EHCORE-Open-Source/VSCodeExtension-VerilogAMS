@@ -66,7 +66,11 @@
                     "comment": "numeric for scientific or symbol notation",
                     "name": "constant.numeric.va",
                     "match": "(?:\\b|[+-])[0-9_]+(?:\\.[0-9_]+)?(?:[eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
-                },
+                }
+            ]
+        },
+        "infinite": {
+            "patterns": [
                 {
                     "comment": "infinite number",
                     "name": "keyword.other.va.numeric.infinite variable.other.constant.va.numeric.infinite",
@@ -278,10 +282,13 @@
                     "include": "#definition"
                 },
                 {
+                    "include": "#infinite"
+                },
+                {
                     "include": "#keyword"
                 },
                 {
-                    "include": "#port_attribute"
+                    "include": "#output"
                 },
                 {
                     "include": "#function"
@@ -347,7 +354,7 @@
                             "include": "#basic"
                         },
                         {
-                            "include": "#collection"
+                            "include": "#range"
                         },
                         {
                             "include": "#mathematics"
@@ -356,11 +363,11 @@
                 }
             ]
         },
-        "collection": {
+        "range": {
             "patterns": [
                 {
                     "match": "\\b(?:from|exclude)\\b",
-                    "name": "keyword.control.va.parameter.collection"
+                    "name": "keyword.control.va.parameter.range"
                 },
                 {
                     "comment": "valid range definition",
@@ -385,6 +392,9 @@
                         },
                         {
                             "include": "#numeric"
+                        },
+                        {
+                            "include": "#infinite"
                         },
                         {
                             "include": "#mathematics"
@@ -549,7 +559,7 @@
                 }
             ]
         },
-        "port_attribute": {
+        "output": {
             "patterns": [
                 {
                     "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
