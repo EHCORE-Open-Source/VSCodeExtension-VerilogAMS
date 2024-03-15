@@ -66,6 +66,11 @@
                     "comment": "numeric for scientific or symbol notation",
                     "name": "constant.numeric.va",
                     "match": "(?:\\b|[+-])[0-9_]+(?:\\.[0-9_]+)?(?:[eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
+                },
+                {
+                    "comment": "infinite number",
+                    "name": "keyword.other.va.numeric.infinite variable.other.constant.va.numeric.infinite",
+                    "match": "(?:\\b|[+-])(?:inf)\\b"
                 }
             ]
         },
@@ -386,10 +391,6 @@
                         },
                         {
                             "include": "#definition"
-                        },
-                        {
-                            "match": "(?:\\b|[+-])(?:inf)\\b",
-                            "name": "keyword.other.va.parameter.infinite variable.other.constant.va.parameter.infinite"
                         }
                     ]
                 }
