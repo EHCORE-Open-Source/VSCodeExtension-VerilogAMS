@@ -159,7 +159,7 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#port"
+                            "include": "#moduleport"
                         }
                     ]
                 },
@@ -190,16 +190,29 @@
                 }
             ]
         },
-        "port": {
+        "moduleport": {
             "patterns": [
                 {
-                    "match": "\\b(?:(in[op]ut|output)\\s+)?([[:word:]][[:word:]$]*)\\b",
+                    "match": "\\b(?:(in[op]ut|output)(?:\\[([^\\]]*)\\]\\s*|\\s)?\\s*)?([[:word:]][[:word:]$]*)\\b",
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
                             "name": "keyword.other.va.port.direction"
                         },
                         "2": {
+                            "patterns": [
+                                {
+                                    "include": "#comment"
+                                },
+                                {
+                                    "include": "#definition"
+                                },
+                                {
+                                    "include": "#numeric"
+                                }
+                            ]
+                        },
+                        "3": {
                             "name": "strong.va.port"
                         }
                     }
@@ -346,7 +359,7 @@
                 },
                 {
                     "comment": "valid range definition",
-                    "begin": "(?<=\\b(?:from|exclude)\\s+)([\\[\\(])",
+                    "begin": "(?<=\\b(?:from|exclude)\\s*)([\\[\\(])",
                     "beginCaptures": {
                         "1": {
                             "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
@@ -409,7 +422,7 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#portname"
+                            "include": "#portbus"
                         }
                     ]
                 },
@@ -430,10 +443,38 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#portname"
+                            "include": "#portbus"
                         }
                     ]
                     
+                }
+            ]
+        },
+        "portbus": {
+            "patterns": [
+                {
+                    "begin": "(?<=[[:word:]$]+\\s*)(?:\\[([^\\]]*)\\]\\s*)?",
+                    "beginCaptures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "include": "#comment"
+                                },
+                                {
+                                    "include": "#definition"
+                                },
+                                {
+                                    "include": "#numeric"
+                                }
+                            ]
+                        }
+                    },
+                    "end": "(?=;)",
+                    "patterns": [
+                        {
+                            "include": "#portname"
+                        }
+                    ]
                 }
             ]
         },
