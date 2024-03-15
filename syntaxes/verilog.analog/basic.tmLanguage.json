@@ -342,7 +342,7 @@
             "patterns": [
                 {
                     "match": "\\b(?:and|or)\\b",
-                    "name": "keyword.other.va.event.logic"
+                    "name": "punctuation.definition.tag.event.logic"
                 }
             ]
         },
