@@ -256,7 +256,7 @@
             "patterns": [
                 {
                     "match": "\\b(?:analog)\\b",
-                    "name": "keyword.control.va.block strong.va.block"
+                    "name": "keyword.other.va.block strong.va.block"
                 },
                 {
                     "comment": "analog block",
@@ -311,6 +311,9 @@
                     "patterns": [
                         {
                             "include": "#event"
+                        },
+                        {
+                            "include": "#eventlogic"
                         }
                     ]
                 }
@@ -321,7 +324,7 @@
                 {
                     "comment": "analog event function",
                     "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
-                    "name": "entity.name.function"
+                    "name": "entity.name.function.event"
                 },
                 {
                     "comment": "analog event parameter",
@@ -332,6 +335,14 @@
                             "include": "#normal"
                         }
                     ]
+                }
+            ]
+        },
+        "eventlogic": {
+            "patterns": [
+                {
+                    "match": "\\b(?:and|or)\\b",
+                    "name": "keyword.other.va.event.logic"
                 }
             ]
         },
@@ -523,22 +534,7 @@
                     },
                     "patterns": [
                         {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#string"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#keyword"
-                        },
-                        {
-                            "include": "#system_function"
+                            "include": "#normal"
                         }
                     ]
                 },
