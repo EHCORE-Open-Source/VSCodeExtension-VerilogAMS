@@ -295,6 +295,17 @@
                 },
                 {
                     "include": "#system"
+                },
+                {
+                    "include": "#equation"
+                }
+            ]
+        },
+        "equation": {
+            "patterns": [
+                {
+                    "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
+                    "name": "punctuation.definition.tag.logic"
                 }
             ]
         },
