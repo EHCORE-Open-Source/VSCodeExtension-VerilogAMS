@@ -100,19 +100,50 @@
                             "comment": "octal characters for ASCII",
                             "name": "constant.character.escape.va.octal",
                             "match": "\\\\(?:[01][0-7]{2}|[0-7]{1,2}(?=[^0-7]))"
+                        }
+                    ]
+                     	
+                }
+            ]
+        },
+        "string_input_specification": {
+            "patterns": [
+                {
+                    "comment": "double quotes",
+                    "name": "string.quoted.double.va",
+                    "begin": "\\\"", 
+                    "end": "\\\"",
+		            "patterns": [
+                        {
+                            "include": "$string"
                         },
                         {
                             "comment": "common input format specifications",
                             "name": "support.variable.va.input.specification",
-                            "match": "(?<=\\$[fs]scanf\\([^)]*)\\%[[:digit:]]*(?i)[dobcsmfegr]"
+                            "match": "\\%[[:digit:]]*(?i)[dobcsmfegr]"
+                        }
+                    ]
+                     	
+                }
+            ]
+        },
+        "string_output_specification": {
+            "patterns": [
+                {
+                    "comment": "double quotes",
+                    "name": "string.quoted.double.va",
+                    "begin": "\\\"", 
+                    "end": "\\\"",
+		            "patterns": [
+                        {
+                            "include": "$string"
                         },
                         {
                             "comment": "common output format specifications",
                             "name": "support.variable.va.output.specification",
-                            "match": "(?<=\\$sformat\\([^)]*)\\%(?:(?i)[clm]|[[:digit:]]*[hdobs]|(?:-?[[:digit:]]*\\.[[:digit:]]+)?[fegr])"
+                            "match": "\\%(?:(?i)[clm]|[[:digit:]]*[hdobs]|(?:-?[[:digit:]]*\\.[[:digit:]]+)?[fegr])"
                         }
                     ]
-                     	
                 }
             ]
         },
@@ -539,6 +570,78 @@
                         },
                         {
                             "include": "#conditional_logic"
+                        }
+                    ]
+                },
+                {
+                    "begin": "(?<=(?:\\$sformat))\\s*\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#string_output_specification"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#output"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
+                            "include": "#equation"
+                        }
+                    ]
+                },
+                {
+                    "begin": "(?<=(?:\\$[fs]scanf))\\s*\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#string_input_specification"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#output"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 },
