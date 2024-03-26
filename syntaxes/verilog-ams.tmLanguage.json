@@ -23,6 +23,20 @@
                     "name": "keyword.control.verilog.analog.basic"
                 }
             ]
+        },
+        "numeric": {
+            "patterns": [
+                {
+                    "comment": "numeric for base notation",
+                    "name": "markup.underline.va.numeric.binary constant.numeric.va",
+                    "match": "(?i)(?:\\b([0-9]+)\\s*)?'s?(?:b\\s*[01][_01]*|o\\s*[0-7][_0-7]*|d\\s*[0-9][_0-9]*|h\\s*[0-9a-f][_0-9a-f]*)\\b"
+                },
+                {
+                    "comment": "numeric for scientific or symbol notation",
+                    "name": "constant.numeric.va",
+                    "match": "(?:\\b|[+-])[0-9_]+(?:\\.[0-9_]+)?(?:[eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
+                }
+            ]
         }
     }
 }
