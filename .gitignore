@@ -1,2 +1,4 @@
+# Ignore folder name
 node_modules
 out
+vsix

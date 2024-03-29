@@ -1,20 +1,19 @@
 # Verilog-AMS Syntax Highlighting README
-The extension is help to parse Verilog-AMS output files *.vams or *.va.
+The extension is help to parse Verilog-AMS design files *.vams or Verilog-A design files *.va.
 ## Features
 > Tip: The document *.va and *.vams will apply this extension.
 ## Requirements
 Visual Studio Code
-Verilog-A or Verilog-AMS runtime environment
+Support Verilog-A or Verilog-AMS development environment
 ## Extension Settings
 No context.
 ## Known Issues
 No context.
 ## Release Notes
-First release for 0.0.1.
+First draft release for 0.0.1.
 ### 0.0.1
-Engineering version development
+First draft version release
 -----------------------------------------------------------------------------------------------------------
 ## Working with Markdown
-### For more information
 **Enjoy!**
 

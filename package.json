@@ -1,11 +1,12 @@
 {
     "name": "verilogams-support-package",
     "displayName": "Verilog-AMS Extension",
-    "description": "Verilog-AMS and Verilog-A Support",
+    "description": "Verilog-A and Verilog-AMS support",
     "version": "0.0.1",
-    "publisher": "Chao-Jen Huang",
+    "publisher": "ephoton0210-taiwan",
+    "activationEvents": [],
     "private": false,
-    "license": "GPL",
+    "license": "GPL-3.0-only",
     "repository": {
         "type": "git",
         "url": "https://github.com/EHCORE-Open-Source/vscode_verilog-ams.git"
