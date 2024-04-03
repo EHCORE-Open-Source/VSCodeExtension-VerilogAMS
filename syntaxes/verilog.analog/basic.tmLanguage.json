@@ -208,6 +208,9 @@
                         },
                         {
                             "include": "#analog_block"
+                        },
+                        {
+                            "include": "#instance"
                         }
                     ]
                 }
@@ -227,7 +230,7 @@
                     "name": "variable.va.port strong.va.port",
                     "captures": {
                         "1": {
-                            "name": "invalid.module.port"
+                            "name": "invalid.module.va.port"
                         }
                     }
                 }
@@ -430,7 +433,7 @@
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
-                            "name": "invalid.port"
+                            "name": "invalid.va.port"
                         }
                     }
                 }
@@ -464,7 +467,7 @@
                             "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                             "captures": {
                                 "1": {
-                                    "name": "invalid.variable"
+                                    "name": "invalid.va.variable"
                                 }
                             }
                         }
@@ -492,7 +495,7 @@
                             "name": "variable.va.branch",
                             "captures": {
                                 "1": {
-                                    "name": "invalid.variable"
+                                    "name": "invalid.va.branch"
                                 }
                             }
                         }
@@ -541,7 +544,7 @@
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
-                            "name": "invalid.branch"
+                            "name": "invalid.va.branch"
                         }
                     }
                 }
@@ -641,7 +644,7 @@
             "patterns": [
                 {
                     "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
-                    "name": "punctuation.definition.tag.logic"
+                    "name": "punctuation.definition.tag.va.logic"
                 }
             ]
         },
@@ -671,7 +674,7 @@
                 {
                     "comment": "analog event function",
                     "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
-                    "name": "entity.name.function.event"
+                    "name": "entity.name.function.va.event"
                 },
                 {
                     "comment": "analog event parameter",
@@ -689,7 +692,7 @@
             "patterns": [
                 {
                     "match": "\\b(?:and|or)\\b",
-                    "name": "punctuation.definition.tag.event.logic"
+                    "name": "punctuation.definition.tag.va.event.logic"
                 }
             ]
         },
@@ -910,17 +913,17 @@
                 {
                     "comment": "built-in functions",
                     "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|temperature|warning|write)\\b",
-                    "name": "support.class.verilog",
+                    "name": "support.class.va",
                     "captures": {
                         "0": {
-                            "name": "support.class.verilog strong.va"
+                            "name": "support.class.va strong.va"
                         }
                     }
                 },
                 {
                     "comment": "flushing output",
                     "match": "\\$(fflush)\\b",
-                    "name": "support.class.verilog",
+                    "name": "support.class.va",
                     "captures": {
                         "0": {
                             "name": "strong.va"
@@ -930,7 +933,7 @@
                 {
                     "comment": "formatting data from/to a string",
                     "match": "\\$(s(format|scanf|write))\\b",
-                    "name": "support.class.verilog",
+                    "name": "support.class.va",
                     "captures": {
                         "0": {
                             "name": "strong.va"
@@ -940,7 +943,7 @@
                 {
                     "comment": "file system",
                     "match": "\\$(f(open|close|gets))\\b",
-                    "name": "support.class.verilog",
+                    "name": "support.class.va",
                     "captures": {
                         "0": {
                             "name": "strong.va"
@@ -950,7 +953,7 @@
                 {
                     "comment": "unknown system function",
                     "match": "(?<=[^[:word:]$])\\$[[:word:]$]*\\b",
-                    "name": "invalid.illegal.system.function"
+                    "name": "invalid.illegal.va.system.function"
                 }
             ]
         },
@@ -971,6 +974,42 @@
                 {
                     "comment": "binary_module_path_operator ::= == | != | && | || | & | | | ^ | ^~ | ~^",
                     "name": "keyword.operator.va.operator.binary_module strong.va.operator.binary_module"
+                }
+            ]
+        },
+        "instance": {
+            "patterns": [
+                {
+                    "comment": "instance",
+                    "begin": "\\b(?:[[:word:]][[:word:]$]*)\\b",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "strong.va.instance markup.inserted.va.instance"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#instance_parameter"
+                        }
+                    ]
+                }
+            ]
+        },
+        "instance_parameter": {
+            "patterns": [
+                {
+                    "comment": "instance parameter",
+                    "begin": "(#)\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.instance.parameter strong.va.instance.parameter"
+                        }
+                    },
+                    "end": "\\)"
                 }
             ]
         }
