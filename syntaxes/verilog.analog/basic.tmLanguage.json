@@ -106,7 +106,7 @@
             "patterns": [
                 {
                     "comment": "compiler directives (define)",
-                    "match": "^\\s*(`define)\\s*([[:word:]]*)\\b",
+                    "match": "^\\s*(`define)\\s*([[:alpha:]_][[:word:]$]*)\\b",
                     "captures": {
                         "1": {
                             "name": "keyword.control.va"
@@ -129,7 +129,7 @@
         "definition": {
             "patterns": [
                 {
-                    "match": "`[[:word:]]*\\b",
+                    "match": "`[[:alpha:]_][[:word:]$]*\\b",
                     "name": "variable.other.constant.va.definition strong.va.definition"
                 }
             ]
@@ -138,7 +138,7 @@
             "patterns": [
                 {
                     "comment": "(Verilog-AMS LRM version 2.4 [see 2.8]) simple identifier shall be any sequence of letters, digits, dollar signs ($), and the underscore characters (_).",
-                    "begin": "\\b(module)\\s*([[:word:]][[:word:]$]*)?\\b",
+                    "begin": "\\b(module)\\s*([[:alpha:]_][[:word:]$]*)?\\b",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.va.module"
@@ -226,7 +226,7 @@
                     "name": "keyword.other.va.port.direction"
                 },
                 {
-                    "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                    "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                     "name": "variable.va.port strong.va.port",
                     "captures": {
                         "1": {
@@ -346,7 +346,8 @@
         "interface": {
             "patterns": [
                 {
-                    "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
+                    "comment": "TODO: need to refine the interface function",
+                    "match": "\\b([IV])\\s*\\(\\s*([[:alpha:]_][[:word:]$]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:alpha:]_][[:word:]$]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
                     "captures": {
                         "1": {
                             "name": "strong.va.port.attribute"
@@ -429,7 +430,7 @@
                     "include": "#mathematics"
                 },
                 {
-                    "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                    "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
@@ -464,7 +465,7 @@
                             "include": "#mathematics"
                         },
                         {
-                            "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                             "captures": {
                                 "1": {
                                     "name": "invalid.va.variable"
@@ -491,7 +492,7 @@
                             "include": "#branch_definition"
                         },
                         {
-                            "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                             "name": "variable.va.branch",
                             "captures": {
                                 "1": {
@@ -540,7 +541,7 @@
                     "include": "#mathematics"
                 },
                 {
-                    "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[\\)>/]*)?\\b",
+                    "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[\\)>/]*)?\\b",
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
@@ -843,7 +844,7 @@
         "function": {
             "patterns": [
                 {
-                    "begin": "\\b([[:word:]]*)\\s*\\(",
+                    "begin": "\\b([[:alpha:]_][[:word:]$]*)\\s*\\(",
                     "beginCaptures": {
                         "1": {
                             "patterns": [
@@ -981,7 +982,7 @@
             "patterns": [
                 {
                     "comment": "instance",
-                    "begin": "\\b(?:[[:word:]][[:word:]$]*)\\b",
+                    "begin": "\\b(?:[[:alpha:]_][[:word:]$]*)\\b",
                     "beginCaptures": {
                         "0": {
                             "name": "strong.va.instance markup.inserted.va.instance"
@@ -994,6 +995,9 @@
                         },
                         {
                             "include": "#instance_parameter"
+                        },
+                        {
+                            "include": "#instance_module"
                         }
                     ]
                 }
@@ -1009,6 +1013,146 @@
                             "name": "keyword.other.va.instance.parameter strong.va.instance.parameter"
                         }
                     },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#instance_parameter_entry"
+                        }
+                    ]
+                }
+            ]
+        },
+        "instance_parameter_entry": {
+            "patterns": [
+                {
+                    "comment": "instance entry",
+                    "begin": "(\\.[[:alpha:]_][[:word:]$]*)\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.tag.va.entry"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
+                },
+                {
+                    "comment": "instance system entry",
+                    "begin": "(\\.\\$[[:word:]$]*)\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "invalid.va.entry",
+                            "patterns": [
+                                {
+                                    "match": "\\.\\$(?:angle|[hv]flip|mfactor|[xy]position)\\b",
+                                    "name": "support.type.va.entry"
+                                }
+                            ]
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
+                }
+            ]
+        },
+        "instance_module": {
+            "patterns": [
+                {
+                    "comment": "instance module name",
+                    "match": "([[:alpha:]_][[:word:]$]*)",
+                    "name": "entity.name.tag.css.va.instance strong.va.instance"
+                },
+                {
+                    "comment": "instance module name",
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        },
+                        {
+                            "include": "#instance_port_entry"
+                        },
+                        {
+                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                            "name": "variable.va.port strong.va.port",
+                            "captures": {
+                                "1": {
+                                    "name": "invalid.module.va.port"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "instance_port_entry": {
+            "patterns": [
+                {
+                    "comment": "instance port entry",
+                    "begin": "(\\.[[:alpha:]_][[:word:]$]*)\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.tag.va.port.entry"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        },
+                        {
+                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                            "name": "variable.va.port strong.va.port",
+                            "captures": {
+                                "1": {
+                                    "name": "invalid.module.va.port"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "comment": "invalid instance port entry",
+                    "name": "invalid.va.port.entry",
+                    "begin": "(\\.\\$[[:word:]$]*)\\(",
                     "end": "\\)"
                 }
             ]
