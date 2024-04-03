@@ -195,6 +195,9 @@
                             "include": "#property"
                         },
                         {
+                            "include": "#discipline"
+                        },
+                        {
                             "include": "#branch"
                         },
                         {
@@ -204,7 +207,7 @@
                             "include": "#variable"
                         },
                         {
-                            "include": "#block"
+                            "include": "#analog_block"
                         }
                     ]
                 }
@@ -386,7 +389,11 @@
                             "include": "#portbus"
                         }
                     ]
-                },
+                }
+            ]
+        },
+        "discipline": {
+            "patterns": [
                 {
                     "comment": "discipline declaration",
                     "begin": "\\b(current|ddiscrete|electrical|magnetic|kinematic(?:_v)?|rotational(?:_omega)?|thermal|voltage)\\b",
@@ -581,7 +588,7 @@
                 }
             ]
         },
-        "block": {
+        "analog_block": {
             "patterns": [
                 {
                     "match": "\\b(?:analog)\\b",
