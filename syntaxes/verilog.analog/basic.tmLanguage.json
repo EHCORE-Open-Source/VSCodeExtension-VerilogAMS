@@ -247,7 +247,7 @@
             "patterns": [
                 {
                     "comment": "parameter block definition",
-                    "begin": "\\b(parameter)\\b\\s*(integer|real|string)?\\s*(?:[[:alpha:]_][[:word:]$]*)?\\s*(=)?",
+                    "begin": "\\b(localparam|parameter)\\b\\s*(integer|real|string)?\\s*(?:[[:alpha:]_][[:word:]$]*)?\\s*(=)?",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.va.parameter"
@@ -473,7 +473,7 @@
             "patterns": [
                 {
                     "comment": "data type declaration",
-                    "begin": "\\b(integer|real|string)\\b",
+                    "begin": "\\b(integer|real|string|genvar)\\b",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.va.datatype"
@@ -695,12 +695,12 @@
             "patterns": [
                 {
                     "comment": "analog event function",
-                    "match": "\\b(?:above|absdelta|cross|timer|(?:final|initial)_step)\\b",
+                    "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
                     "name": "support.type.va.event"
                 },
                 {
                     "comment": "analog event parameter",
-                    "begin": "(?<=\\b(?:above|absdelta|cross|timer|(?:final|initial)_step)\\s*)\\(",
+                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)\\(",
                     "end": "\\)",
                     "patterns": [
                         {
@@ -768,19 +768,24 @@
                     ]
                 },
                 {
-                    "comment": "if-else",
-                    "name": "keyword.control.va",
-                    "match": "\\b(if|else|for)\\b"
+                    "comment": "conditional statements",
+                    "name": "keyword.control.va.conditional",
+                    "match": "\\b(if|else)\\b"
                 },
                 {
-                    "comment": "case",
-                    "name": "keyword.control.va",
+                    "comment": "case statements",
+                    "name": "keyword.control.va.case",
                     "match": "\\b(case|endcase)\\b"
                 },
                 {
-                    "comment": "loop",
-                    "name": "keyword.control.va",
-                    "match": "\\b(for|repeat)\\b"
+                    "comment": "default in case statements",
+                    "name": "keyword.other.va.case.default",
+                    "match": "\\b(default)\\b"
+                },
+                {
+                    "comment": "looping statements",
+                    "name": "keyword.control.va.looping",
+                    "match": "\\b(for|repeat|while)\\b"
                 },
                 {
                     "include": "#keyword_feature"
