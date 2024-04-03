@@ -233,7 +233,7 @@
         "module_port_name": {
             "patterns": [
                 {
-                    "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                    "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[\\)/]*)?\\b",
                     "name": "variable.va.port strong.va.port",
                     "captures": {
                         "1": {
@@ -247,13 +247,16 @@
             "patterns": [
                 {
                     "comment": "parameter block definition",
-                    "begin": "\\b(parameter)\\b\\s*(integer|real|string)?",
+                    "begin": "\\b(parameter)\\b\\s*(integer|real|string)?\\s*(?:[[:alpha:]_][[:word:]$]*)?\\s*(=)?",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.va.parameter"
                         },
                         "2": {
                             "name": "keyword.other.va.parameter"
+                        },
+                        "3": {
+                            "name": "punctuation.definition.tag.va.logic"
                         }
                     },
                     "end": ";",
