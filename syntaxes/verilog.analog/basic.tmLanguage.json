@@ -630,20 +630,64 @@
                 },
                 {
                     "comment": "analog block",
-                    "begin": "(?<=\\b(?:analog)\\s+)(?:begin)\\b",
+                    "begin": "(?<=\\b(?:analog))\\s+(?:begin)\\b",
                     "end": "\\b(?:end)\\b",
                     "patterns": [
                         {
-                            "include": "#trigger"
+                            "include": "#analog_trigger"
                         },
                         {
-                            "include": "#normal"
+                            "include": "#analog_definition"
+                        }
+                    ]
+                },
+                {
+                    "comment": "analog block",
+                    "begin": "(?<=\\b(?:analog))\\s+(?!begin)\\b",
+                    "end": "(?<=;)",
+                    "name": "markup.underline",
+                    "patterns": [
+                        {
+                            "include": "#analog_trigger"
+                        },
+                        {
+                            "include": "#analog_definition"
                         }
                     ]
                 }
             ]
         },
-        "normal": {
+        "analog_trigger": {
+            "patterns": [
+                {
+                    "begin": "(@)\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "support.type.va.event strong.va.event"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#event"
+                        },
+                        {
+                            "include": "#eventlogic"
+                        }
+                    ]
+                }
+            ]
+        },
+        "analog_definition": {
             "patterns": [
                 {
                     "include": "#basic"
@@ -679,27 +723,6 @@
                 }
             ]
         },
-        "trigger": {
-            "patterns": [
-                {
-                    "begin": "(@)\\(",
-                    "beginCaptures": {
-                        "1": {
-                            "name": "support.type.va.event strong.va.event"
-                        }
-                    },
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#event"
-                        },
-                        {
-                            "include": "#eventlogic"
-                        }
-                    ]
-                }
-            ]
-        },
         "event": {
             "patterns": [
                 {
@@ -713,7 +736,7 @@
                     "end": "\\)",
                     "patterns": [
                         {
-                            "include": "#normal"
+                            "include": "#analog_definition"
                         }
                     ]
                 }
@@ -734,7 +757,7 @@
                     "end": "\\)",
                     "patterns": [
                         {
-                            "include": "#normal"
+                            "include": "#analog_definition"
                         },
                         {
                             "include": "#conditional_logic"
@@ -828,7 +851,7 @@
                     },
                     "patterns": [
                         {
-                            "include": "#normal"
+                            "include": "#analog_definition"
                         }
                     ]
                 },
