@@ -117,6 +117,18 @@
                     }
                 },
                 {
+                    "comment": "compiler directives (timescale)",
+                    "match": "^\\s*(`timescale)\\s*([[:alpha:]_][[:word:]$]*)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.va"
+                        },
+                        "2": {
+                            "name": "variable.other.constant.va"
+                        }
+                    }
+                },
+                {
                     "comment": "compiler directives (others)",
                     "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
                     "name": "keyword.control.va"
