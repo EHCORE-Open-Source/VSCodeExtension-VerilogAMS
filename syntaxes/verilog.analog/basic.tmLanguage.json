@@ -630,8 +630,18 @@
                 },
                 {
                     "comment": "analog block",
-                    "begin": "(?<=\\b(?:analog))\\s+(?:begin)\\b",
-                    "end": "\\b(?:end)\\b",
+                    "begin": "(?<=\\b(?:analog))\\s+(begin)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.begin"
+                        }
+                    },
+                    "end": "\\b(end)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.end"
+                        }
+                    },
                     "patterns": [
                         {
                             "include": "#analog_trigger"
@@ -685,12 +695,12 @@
             "patterns": [
                 {
                     "comment": "analog event function",
-                    "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
+                    "match": "\\b(?:above|absdelta|cross|timer|(?:final|initial)_step)\\b",
                     "name": "support.type.va.event"
                 },
                 {
                     "comment": "analog event parameter",
-                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)\\(",
+                    "begin": "(?<=\\b(?:above|absdelta|cross|timer|(?:final|initial)_step)\\s*)\\(",
                     "end": "\\)",
                     "patterns": [
                         {
@@ -736,15 +746,48 @@
                 }
             ]
         },
-        "equation": {
+        "keyword": {
             "patterns": [
                 {
-                    "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
-                    "name": "punctuation.definition.tag.va.logic"
+                    "begin": "\\b(begin)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.begin"
+                        }
+                    },
+                    "end": "\\b(end)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.end"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#analog_definition"
+                        }
+                    ]
+                },
+                {
+                    "comment": "if-else",
+                    "name": "keyword.control.va",
+                    "match": "\\b(if|else|for)\\b"
+                },
+                {
+                    "comment": "case",
+                    "name": "keyword.control.va",
+                    "match": "\\b(case|endcase)\\b"
+                },
+                {
+                    "comment": "loop",
+                    "name": "keyword.control.va",
+                    "match": "\\b(for|repeat)\\b"
+                },
+                {
+                    "include": "#keyword_feature"
                 }
             ]
         },
-        "keyword": {
+        "keyword_feature": {
             "patterns": [
                 {
                     "begin": "(?<=\\b(?:if))\\s*\\(",
@@ -829,40 +872,14 @@
                             "include": "#equation"
                         }
                     ]
-                },
+                }
+            ]
+        },
+        "equation": {
+            "patterns": [
                 {
-                    "begin": "\\b(begin)\\b",
-                    "beginCaptures": {
-                        "1": {
-                            "name": "keyword.control.va"
-                        }
-                    },
-                    "end": "\\b(end)\\b",
-                    "endCaptures": {
-                        "1": {
-                            "name": "keyword.control.va"
-                        }
-                    },
-                    "patterns": [
-                        {
-                            "include": "#analog_definition"
-                        }
-                    ]
-                },
-                {
-                    "comment": "if-else",
-                    "name": "keyword.control.va",
-                    "match": "\\b(if|else|for)\\b"
-                },
-                {
-                    "comment": "case",
-                    "name": "keyword.control.va",
-                    "match": "\\b(case[xz]?|endcase)\\b"
-                },
-                {
-                    "comment": "loop",
-                    "name": "keyword.control.va",
-                    "match": "\\b(for|repeat)\\b"
+                    "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
+                    "name": "punctuation.definition.tag.va.logic"
                 }
             ]
         },
