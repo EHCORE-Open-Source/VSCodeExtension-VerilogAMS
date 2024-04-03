@@ -176,7 +176,7 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#moduleport"
+                            "include": "#module_port"
                         }
                     ]
                 },
@@ -216,7 +216,7 @@
                 }
             ]
         },
-        "moduleport": {
+        "module_port": {
             "patterns": [
                 {
                     "include": "#numeric"
@@ -225,6 +225,13 @@
                     "match": "\\b(in[op]ut|output)\\b",
                     "name": "keyword.other.va.port.direction"
                 },
+                {
+                    "include": "#module_port_name"
+                }
+            ]
+        },
+        "module_port_name": {
+            "patterns": [
                 {
                     "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                     "name": "variable.va.port strong.va.port",
@@ -430,11 +437,18 @@
                     "include": "#mathematics"
                 },
                 {
+                    "include": "#port_branch_name"
+                }
+            ]
+        },
+        "port_branch_name": {
+            "patterns": [
+                {
                     "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
-                            "name": "invalid.va.port"
+                            "name": "invalid.module.va.port"
                         }
                     }
                 }
@@ -465,14 +479,21 @@
                             "include": "#mathematics"
                         },
                         {
-                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
-                            "captures": {
-                                "1": {
-                                    "name": "invalid.va.variable"
-                                }
-                            }
+                            "include": "#variable_name"
                         }
                     ]
+                }
+            ]
+        },
+        "variable_name": {
+            "patterns": [
+                {
+                    "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                    "captures": {
+                        "1": {
+                            "name": "invalid.module.va.variable"
+                        }
+                    }
                 }
             ]
         },
@@ -492,13 +513,7 @@
                             "include": "#branch_definition"
                         },
                         {
-                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
-                            "name": "variable.va.branch",
-                            "captures": {
-                                "1": {
-                                    "name": "invalid.va.branch"
-                                }
-                            }
+                            "include": "#port_branch_name"
                         }
                     ]
                 }
@@ -1082,7 +1097,7 @@
                 {
                     "comment": "instance module name",
                     "match": "([[:alpha:]_][[:word:]$]*)",
-                    "name": "entity.name.tag.css.va.instance strong.va.instance"
+                    "name": "constant.character.set.regexp.va.instance strong.va.instance"
                 },
                 {
                     "comment": "instance module name",
@@ -1105,13 +1120,7 @@
                             "include": "#instance_port_entry"
                         },
                         {
-                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
-                            "name": "variable.va.port strong.va.port",
-                            "captures": {
-                                "1": {
-                                    "name": "invalid.module.va.port"
-                                }
-                            }
+                            "include": "#port_branch_name"
                         }
                     ]
                 }
@@ -1139,13 +1148,7 @@
                             "include": "#mathematics"
                         },
                         {
-                            "match": "\\b[[:alpha:]_][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
-                            "name": "variable.va.port strong.va.port",
-                            "captures": {
-                                "1": {
-                                    "name": "invalid.module.va.port"
-                                }
-                            }
+                            "include": "#port_branch_name"
                         }
                     ]
                 },
