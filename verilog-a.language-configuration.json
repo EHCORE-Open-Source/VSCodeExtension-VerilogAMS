@@ -4,6 +4,7 @@
         "blockComment": [ "/*", "*/" ]
     },
     "brackets": [
+        [ "(<", ">)" ],
         [ "(", ")" ],
         [ "[", "]" ],
         [ "{", "}" ],
@@ -22,11 +23,13 @@
         [ "task", "endtask" ]
     ],
     "autoClosingPairs": [
+        { "open": "(<", "close": ">)", "notIn": [ "comment", "string" ] },
         { "open": "(", "close": ")", "notIn": [ "comment", "string" ] },
         { "open": "[", "close": "]", "notIn": [ "comment", "string" ] },
         { "open": "{", "close": "}", "notIn": [ "comment", "string" ] }
     ],
     "surroundingPairs": [
+        [ "(<", ">)" ],
         [ "(", ")" ],
         [ "[", "]" ],
         [ "{", "}" ]
@@ -38,6 +41,7 @@
         }
     },
     "colorizedBracketPairs": [
+        [ "(<", ">)" ],
         [ "(", ")" ],
         [ "[", "]" ],
         [ "{", "}" ],
