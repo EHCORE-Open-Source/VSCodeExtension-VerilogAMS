@@ -686,7 +686,7 @@
                 {
                     "comment": "analog event function",
                     "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
-                    "name": "entity.name.function.va.event"
+                    "name": "support.type.va.event"
                 },
                 {
                     "comment": "analog event parameter",
