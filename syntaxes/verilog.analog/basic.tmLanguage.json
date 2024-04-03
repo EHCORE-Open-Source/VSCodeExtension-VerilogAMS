@@ -192,16 +192,16 @@
                             "include": "#definition"
                         },
                         {
-                            "include": "#parameter"
-                        },
-                        {
                             "include": "#property"
                         },
                         {
-                            "include": "#variable"
+                            "include": "#branch"
                         },
                         {
-                            "include": "#branch"
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#variable"
                         },
                         {
                             "include": "#block"
