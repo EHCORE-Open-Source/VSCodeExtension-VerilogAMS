@@ -55,24 +55,6 @@
                 }
             ]
         },
-        "numeric": {
-            "patterns": [
-                {
-                    "comment": "numeric for scientific or symbol notation",
-                    "name": "constant.numeric.va",
-                    "match": "(?:\\b|[+-])[0-9_]+(?:\\.[0-9_]+)?(?:[eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
-                }
-            ]
-        },
-        "infinite": {
-            "patterns": [
-                {
-                    "comment": "infinite number",
-                    "name": "keyword.other.va.numeric.infinite variable.other.constant.va.numeric.infinite",
-                    "match": "(?:\\b|[+-])(?:inf)\\b"
-                }
-            ]
-        },
         "string": {
             "patterns": [
                 {
@@ -101,44 +83,12 @@
                 }
             ]
         },
-        "string_input_specification": {
+        "numeric": {
             "patterns": [
                 {
-                    "comment": "double quotes",
-                    "name": "string.quoted.double.va",
-                    "begin": "\\\"", 
-                    "end": "\\\"",
-		            "patterns": [
-                        {
-                            "include": "$string"
-                        },
-                        {
-                            "comment": "common input format specifications",
-                            "name": "support.variable.va.input.specification",
-                            "match": "\\%[[:digit:]]*(?i)[dobcsmfegr]"
-                        }
-                    ]
-                     	
-                }
-            ]
-        },
-        "string_output_specification": {
-            "patterns": [
-                {
-                    "comment": "double quotes",
-                    "name": "string.quoted.double.va",
-                    "begin": "\\\"", 
-                    "end": "\\\"",
-		            "patterns": [
-                        {
-                            "include": "$string"
-                        },
-                        {
-                            "comment": "common output format specifications",
-                            "name": "support.variable.va.output.specification",
-                            "match": "\\%(?:(?i)[clm]|[[:digit:]]*[hdobs]|(?:-?[[:digit:]]*\\.[[:digit:]]+)?[fegr])"
-                        }
-                    ]
+                    "comment": "numeric for scientific or symbol notation",
+                    "name": "constant.numeric.va",
+                    "match": "(?:\\b|[+-])[0-9_]+(?:\\.[0-9_]+)?(?:[eE][+-]?[0-9_]+|[TGMKkmunpfa])?\\b"
                 }
             ]
         },
@@ -149,6 +99,38 @@
                 },
                 {
                     "include": "#package"
+                }
+            ]
+        },
+        "preprocess": {
+            "patterns": [
+                {
+                    "comment": "compiler directives (define)",
+                    "match": "^\\s*(`define)\\s*([[:word:]]*)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.va"
+                        },
+                        "2": {
+                            "name": "variable.other.constant.va"
+                        }
+                    }
+                },
+                {
+                    "comment": "compiler directives (others)",
+                    "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
+                    "name": "keyword.control.va"
+                },
+                {
+                    "include": "#definition"
+                }
+            ]
+        },
+        "definition": {
+            "patterns": [
+                {
+                    "match": "`[[:word:]]*\\b",
+                    "name": "variable.other.constant.va.definition strong.va.definition"
                 }
             ]
         },
@@ -219,6 +201,9 @@
                             "include": "#variable"
                         },
                         {
+                            "include": "#branch"
+                        },
+                        {
                             "include": "#block"
                         }
                     ]
@@ -228,53 +213,314 @@
         "moduleport": {
             "patterns": [
                 {
-                    "match": "\\b(?:(in[op]ut|output)(?:\\[([^\\]]*)\\]\\s*|\\s)?\\s*)?([[:word:]][[:word:]$]*)\\b",
-                    "name": "variable.va.port",
+                    "include": "#numeric"
+                },
+                {
+                    "match": "\\b(in[op]ut|output)\\b",
+                    "name": "keyword.other.va.port.direction"
+                },
+                {
+                    "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                    "name": "variable.va.port strong.va.port",
                     "captures": {
                         "1": {
-                            "name": "keyword.other.va.port.direction"
-                        },
-                        "2": {
-                            "patterns": [
-                                {
-                                    "include": "#comment"
-                                },
-                                {
-                                    "include": "#definition"
-                                },
-                                {
-                                    "include": "#numeric"
-                                }
-                            ]
-                        },
-                        "3": {
-                            "name": "strong.va.port"
+                            "name": "invalid.moduleport"
                         }
                     }
                 }
             ]
         },
-        "preprocess": {
+        "parameter": {
             "patterns": [
                 {
-                    "comment": "compiler directives (define)",
-                    "match": "^\\s*(`define)\\s*([[:word:]]*)\\b",
-                    "captures": {
+                    "comment": "parameter block definition",
+                    "begin": "\\b(parameter)\\b\\s*(integer|real|string)?",
+                    "beginCaptures": {
                         "1": {
-                            "name": "keyword.control.va"
+                            "name": "keyword.other.va.parameter"
                         },
                         "2": {
-                            "name": "variable.other.constant.va"
+                            "name": "keyword.other.va.parameter"
                         }
-                    }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#range"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
+                }
+            ]
+        },
+        "range": {
+            "patterns": [
+                {
+                    "match": "\\b(?:from|exclude)\\b",
+                    "name": "keyword.control.va.parameter.range"
                 },
                 {
-                    "comment": "compiler directives (others)",
-                    "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
-                    "name": "keyword.control.va"
+                    "comment": "valid range definition",
+                    "begin": "(?<=\\b(?:from|exclude)\\s*)([\\[\\(])",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
+                        }
+                    },
+                    "end": "([\\]\\)])",
+                    "endCaptures": {
+                        "1": {
+                            "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
+                }
+            ]
+        },
+        "infinite": {
+            "patterns": [
+                {
+                    "comment": "infinite number",
+                    "name": "keyword.other.va.numeric.infinite variable.other.constant.va.numeric.infinite",
+                    "match": "(?:\\b|[+-])(?:inf)\\b"
+                }
+            ]
+        },
+        "mathematics": {
+            "patterns": [
+                {
+                    "begin": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.name.function.va.math"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
+                }
+            ]
+        },
+        "interface": {
+            "patterns": [
+                {
+                    "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
+                    "captures": {
+                        "1": {
+                            "name": "strong.va.port.attribute"
+                        },
+                        "2": {
+                            "name": "variable.va.port"
+                        },
+                        "3": {
+                            "name": "variable.va.port"
+                        }
+                    }
+                }
+            ]
+        },
+        "property": {
+            "patterns": [
+                {
+                    "comment": "port declaration",
+                    "begin": "\\b(?:in[op]ut|output)\\b",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "keyword.other.va.port.direction"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#portbus"
+                        }
+                    ]
+                },
+                {
+                    "comment": "ground declaration",
+                    "begin": "\\b(?:ground)\\b",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "keyword.other.va.port.ground"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#portbus"
+                        }
+                    ]
+                },
+                {
+                    "comment": "discipline declaration",
+                    "begin": "\\b(?:current|ddiscrete|electrical|magnetic|kinematic(?:_v)?|rotational(?:_omega)?|thermal|voltage)\\b",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "support.type.va.discipline"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#portbus"
+                        }
+                    ]
+                }
+            ]
+        },
+        "portbus": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#numeric"
                 },
                 {
                     "include": "#definition"
+                },
+                {
+                    "include": "#mathematics"
+                },
+                {
+                    "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                    "name": "variable.va.port",
+                    "captures": {
+                        "1": {
+                            "name": "invalid.portname"
+                        }
+                    }
+                }
+            ]
+        },
+        "variable": {
+            "patterns": [
+                {
+                    "comment": "data type declaration",
+                    "begin": "\\b(integer|real|string)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.datatype"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        },
+                        {
+                            "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                            "captures": {
+                                "1": {
+                                    "name": "invalid.variable"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "branch": {
+            "patterns": [
+                {
+                    "match": "\\b(branch)\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.others.branch"
+                        },
+                        "2": {
+                            "name": "variable.va.port"
+                        },
+                        "3": {
+                            "name": "variable.va.port"
+                        }
+                    }
+                }
+            ]
+        },
+        "string_input_specification": {
+            "patterns": [
+                {
+                    "comment": "double quotes",
+                    "name": "string.quoted.double.va",
+                    "begin": "\\\"", 
+                    "end": "\\\"",
+		            "patterns": [
+                        {
+                            "include": "$string"
+                        },
+                        {
+                            "comment": "common input format specifications",
+                            "name": "support.variable.va.input.specification",
+                            "match": "\\%[[:digit:]]*(?i)[dobcsmfegr]"
+                        }
+                    ]
+                     	
+                }
+            ]
+        },
+        "string_output_specification": {
+            "patterns": [
+                {
+                    "comment": "double quotes",
+                    "name": "string.quoted.double.va",
+                    "begin": "\\\"", 
+                    "end": "\\\"",
+		            "patterns": [
+                        {
+                            "include": "$string"
+                        },
+                        {
+                            "comment": "common output format specifications",
+                            "name": "support.variable.va.output.specification",
+                            "match": "\\%(?:(?i)[clm]|[[:digit:]]*[hdobs]|(?:-?[[:digit:]]*\\.[[:digit:]]+)?[fegr])"
+                        }
+                    ]
                 }
             ]
         },
@@ -314,7 +560,7 @@
                     "include": "#keyword"
                 },
                 {
-                    "include": "#output"
+                    "include": "#interface"
                 },
                 {
                     "include": "#function"
@@ -383,177 +629,6 @@
                 }
             ]
         },
-        "parameter": {
-            "patterns": [
-                {
-                    "comment": "parameter block definition",
-                    "begin": "\\b(parameter)\\b\\s*(integer|real|string)?",
-                    "beginCaptures": {
-                        "1": {
-                            "name": "keyword.other.va.parameter"
-                        },
-                        "2": {
-                            "name": "keyword.other.va.parameter"
-                        }
-                    },
-                    "end": ";",
-                    "patterns": [
-                        {
-                            "include": "#basic"
-                        },
-                        {
-                            "include": "#range"
-                        },
-                        {
-                            "include": "#mathematics"
-                        }
-                    ]
-                }
-            ]
-        },
-        "range": {
-            "patterns": [
-                {
-                    "match": "\\b(?:from|exclude)\\b",
-                    "name": "keyword.control.va.parameter.range"
-                },
-                {
-                    "comment": "valid range definition",
-                    "begin": "(?<=\\b(?:from|exclude)\\s*)([\\[\\(])",
-                    "beginCaptures": {
-                        "1": {
-                            "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
-                        }
-                    },
-                    "end": "([\\]\\)])",
-                    "endCaptures": {
-                        "1": {
-                            "name": "strong.va.parameter.range comment.va.parameter.range strong.va.parameter.range"
-                        }
-                    },
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#string"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#infinite"
-                        },
-                        {
-                            "include": "#mathematics"
-                        },
-                        {
-                            "include": "#definition"
-                        }
-                    ]
-                }
-            ]
-        },
-        "definition": {
-            "patterns": [
-                {
-                    "match": "`[[:word:]]*\\b",
-                    "name": "variable.other.constant.va.definition strong.va.definition"
-                }
-            ]
-        },
-        "property": {
-            "patterns": [
-                {
-                    "comment": "port declaration",
-                    "begin": "\\b(?:in[op]ut|output)\\b",
-                    "beginCaptures": {
-                        "0": {
-                            "name": "keyword.other.va.port.direction"
-                        }
-                    },
-                    "end": ";",
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#portbus"
-                        }
-                    ]
-                },
-                {
-                    "comment": "electrical declaration",
-                    "begin": "\\b(?:current|electrical|voltage)\\b",
-                    "beginCaptures": {
-                        "0": {
-                            "name": "keyword.other.va.port.type"
-                        }
-                    },
-                    "end": ";",
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#portbus"
-                        }
-                    ]
-                    
-                }
-            ]
-        },
-        "portbus": {
-            "patterns": [
-                {
-                    "begin": "(?<=[[:word:]$]+\\s*)(?:\\[([^\\]]*)\\]\\s*)?",
-                    "beginCaptures": {
-                        "1": {
-                            "patterns": [
-                                {
-                                    "include": "#comment"
-                                },
-                                {
-                                    "include": "#definition"
-                                },
-                                {
-                                    "include": "#numeric"
-                                }
-                            ]
-                        }
-                    },
-                    "end": "(?=;)",
-                    "patterns": [
-                        {
-                            "include": "#portname"
-                        }
-                    ]
-                }
-            ]
-        },
-        "portname": {
-            "patterns": [
-                {
-                    "match": "\\b([[:word:]][[:word:]$]*)\\b",
-                    "name": "variable.va.port"
-                }
-            ]
-        },
-        "variable": {
-            "patterns": [
-                {
-                    "comment": "data type declaration",
-                    "name": "keyword.other.va.datatype",
-                    "match": "\\b(?:integer|real|string)\\b"
-                }
-            ]
-        },
         "keyword": {
             "patterns": [
                 {
@@ -591,7 +666,7 @@
                             "include": "#keyword"
                         },
                         {
-                            "include": "#output"
+                            "include": "#interface"
                         },
                         {
                             "include": "#function"
@@ -627,7 +702,7 @@
                             "include": "#keyword"
                         },
                         {
-                            "include": "#output"
+                            "include": "#interface"
                         },
                         {
                             "include": "#function"
@@ -695,51 +770,6 @@
                             ]
                         }
                     }
-                }
-            ]
-        },
-        "output": {
-            "patterns": [
-                {
-                    "match": "\\b([IV])\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
-                    "captures": {
-                        "1": {
-                            "name": "strong.va.port.attribute"
-                        },
-                        "2": {
-                            "name": "variable.va.port"
-                        },
-                        "3": {
-                            "name": "variable.va.port"
-                        }
-                    }
-                }
-            ]
-        },
-        "mathematics": {
-            "patterns": [
-                {
-                    "begin": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\s*\\(",
-                    "beginCaptures": {
-                        "1": {
-                            "name": "entity.name.function.va.math"
-                        }
-                    },
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#mathematics"
-                        }
-                    ]
                 }
             ]
         },
