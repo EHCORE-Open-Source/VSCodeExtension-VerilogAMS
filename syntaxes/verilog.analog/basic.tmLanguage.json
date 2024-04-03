@@ -643,7 +643,7 @@
                 },
                 {
                     "comment": "analog block",
-                    "begin": "(?<=\\b(?:analog))\\s+(?!begin)\\b",
+                    "begin": "(?<=\\b(?:analog))(?!\\s+begin)\\b",
                     "end": "(?<=;)",
                     "name": "markup.underline",
                     "patterns": [
@@ -672,18 +672,39 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
                             "include": "#event"
                         },
                         {
                             "include": "#eventlogic"
                         }
                     ]
+                }
+            ]
+        },
+        "event": {
+            "patterns": [
+                {
+                    "comment": "analog event function",
+                    "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
+                    "name": "entity.name.function.va.event"
+                },
+                {
+                    "comment": "analog event parameter",
+                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#analog_definition"
+                        }
+                    ]
+                }
+            ]
+        },
+        "eventlogic": {
+            "patterns": [
+                {
+                    "match": "\\b(?:and|or)\\b",
+                    "name": "punctuation.definition.tag.va.event.logic"
                 }
             ]
         },
@@ -720,33 +741,6 @@
                 {
                     "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
                     "name": "punctuation.definition.tag.va.logic"
-                }
-            ]
-        },
-        "event": {
-            "patterns": [
-                {
-                    "comment": "analog event function",
-                    "match": "\\b(?:above|cross|timer|(?:final|initial)_step)\\b",
-                    "name": "entity.name.function.va.event"
-                },
-                {
-                    "comment": "analog event parameter",
-                    "begin": "(?<=\\b(?:above|cross|timer|(?:final|initial)_step)\\s*)\\(",
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#analog_definition"
-                        }
-                    ]
-                }
-            ]
-        },
-        "eventlogic": {
-            "patterns": [
-                {
-                    "match": "\\b(?:and|or)\\b",
-                    "name": "punctuation.definition.tag.va.event.logic"
                 }
             ]
         },
