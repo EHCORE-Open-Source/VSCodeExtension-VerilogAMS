@@ -354,18 +354,30 @@
             "patterns": [
                 {
                     "comment": "TODO: need to refine the interface function",
-                    "match": "\\b([IV])\\s*\\(\\s*([[:alpha:]_][[:word:]$]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:alpha:]_][[:word:]$]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
-                    "captures": {
+                    "begin": "\\b([IV])\\s*\\(",
+                    "beginCaptures": {
                         "1": {
                             "name": "strong.va.port.attribute"
-                        },
-                        "2": {
-                            "name": "variable.va.port"
-                        },
-                        "3": {
-                            "name": "variable.va.port"
                         }
-                    }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        },
+                        {
+                            "include": "#module_port_name"
+                        }
+                    ]
                 }
             ]
         },
