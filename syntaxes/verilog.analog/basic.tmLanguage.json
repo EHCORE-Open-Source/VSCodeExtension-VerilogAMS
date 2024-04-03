@@ -224,7 +224,7 @@
                     "name": "variable.va.port strong.va.port",
                     "captures": {
                         "1": {
-                            "name": "invalid.moduleport"
+                            "name": "invalid.module.port"
                         }
                     }
                 }
@@ -359,9 +359,9 @@
             "patterns": [
                 {
                     "comment": "port declaration",
-                    "begin": "\\b(?:in[op]ut|output)\\b",
+                    "begin": "\\b(in[op]ut|output)\\b",
                     "beginCaptures": {
-                        "0": {
+                        "1": {
                             "name": "keyword.other.va.port.direction"
                         }
                     },
@@ -374,9 +374,9 @@
                 },
                 {
                     "comment": "ground declaration",
-                    "begin": "\\b(?:ground)\\b",
+                    "begin": "\\b(ground)\\b",
                     "beginCaptures": {
-                        "0": {
+                        "1": {
                             "name": "keyword.other.va.port.ground"
                         }
                     },
@@ -389,9 +389,9 @@
                 },
                 {
                     "comment": "discipline declaration",
-                    "begin": "\\b(?:current|ddiscrete|electrical|magnetic|kinematic(?:_v)?|rotational(?:_omega)?|thermal|voltage)\\b",
+                    "begin": "\\b(current|ddiscrete|electrical|magnetic|kinematic(?:_v)?|rotational(?:_omega)?|thermal|voltage)\\b",
                     "beginCaptures": {
-                        "0": {
+                        "1": {
                             "name": "support.type.va.discipline"
                         }
                     },
@@ -423,7 +423,7 @@
                     "name": "variable.va.port",
                     "captures": {
                         "1": {
-                            "name": "invalid.portname"
+                            "name": "invalid.port"
                         }
                     }
                 }
@@ -468,16 +468,73 @@
         "branch": {
             "patterns": [
                 {
-                    "match": "\\b(branch)\\s*\\(\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*(?:,\\s*([[:word:]]*)\\s*(?:\\[[^\\]]*\\])?\\s*)?\\)",
+                    "comment": "branch declaration",
+                    "begin": "\\b(branch)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.branch"
+                        }
+                    },
+                    "end": ";",
+                    "patterns": [
+                        {
+                            "include": "#branch_definition"
+                        },
+                        {
+                            "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[/]*)?\\b",
+                            "name": "variable.va.branch",
+                            "captures": {
+                                "1": {
+                                    "name": "invalid.variable"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "branch_definition": {
+            "patterns": [
+                {
+                    "begin": "\\(<",
+                    "end": ">\\)",
+                    "patterns": [
+                        {
+                            "include": "#branch_defname"
+                        }
+                    ]
+                },
+                {
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#branch_defname"   
+                        }
+                    ]
+                }
+            ]
+        },
+        "branch_defname": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#numeric"
+                },
+                {
+                    "include": "#definition"
+                },
+                {
+                    "include": "#mathematics"
+                },
+                {
+                    "match": "\\b[[:word:]][[:word:]$]*\\s*([^,;\\[\\)>/]*)?\\b",
+                    "name": "variable.va.port",
                     "captures": {
                         "1": {
-                            "name": "keyword.others.branch"
-                        },
-                        "2": {
-                            "name": "variable.va.port"
-                        },
-                        "3": {
-                            "name": "variable.va.port"
+                            "name": "invalid.branch"
                         }
                     }
                 }
