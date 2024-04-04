@@ -1170,6 +1170,11 @@
                     "name": "support.class.va.system.command strong.va.system.command"
                 },
                 {
+                    "comment": "probabilistic distribution system functions",
+                    "match": "\\$(?:dist_(?:chi_square|erlang|exponential|normal|poisson|t|uniform)|a?random)\\b",
+                    "name": "support.class.va.system.command strong.va.system.command"
+                },
+                {
                     "comment": "math system functions",
                     "match": "\\$(?:a?(?:cos|sin|tan)h?|atan2|ceil|clog2|exp|floor|hypot|ln|log10|pow|sqrt)\\b",
                     "name": "support.class.va.system.mathematics strong.va.system.mathematics"
