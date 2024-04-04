@@ -872,82 +872,6 @@
                 }
             ]
         },
-        "function_feature": {
-            "patterns": [
-                {
-                    "begin": "(?<=(?:\\$sformat))\\s*\\(",
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#string_output_specification"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#infinite"
-                        },
-                        {
-                            "include": "#keyword"
-                        },
-                        {
-                            "include": "#interface"
-                        },
-                        {
-                            "include": "#function"
-                        },
-                        {
-                            "include": "#system"
-                        },
-                        {
-                            "include": "#equation"
-                        }
-                    ]
-                },
-                {
-                    "begin": "(?<=(?:\\$[fs]scanf))\\s*\\(",
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#string_input_specification"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#infinite"
-                        },
-                        {
-                            "include": "#keyword"
-                        },
-                        {
-                            "include": "#interface"
-                        },
-                        {
-                            "include": "#function"
-                        },
-                        {
-                            "include": "#system"
-                        },
-                        {
-                            "include": "#equation"
-                        }
-                    ]
-                }
-            ]
-        },
         "equation": {
             "patterns": [
                 {
@@ -1050,6 +974,26 @@
         "system": {
             "patterns": [
                 {
+                    "match": "(\\$[[:alpha:]_][[:word:]$]*)",
+                    "name": "invalid.va.system",
+                    "captures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "include": "#system_task"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "include": "#system_feature"
+                }
+            ]
+        },
+        "system_task": {
+            "patterns": [
+                {
                     "comment": "built-in functions",
                     "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|temperature|warning|write)\\b",
                     "name": "support.class.va",
@@ -1081,18 +1025,89 @@
                 },
                 {
                     "comment": "file system",
-                    "match": "\\$(f(open|close|gets))\\b",
+                    "match": "\\$(f(open|close|gets|scanf))\\b",
                     "name": "support.class.va",
                     "captures": {
                         "0": {
                             "name": "strong.va"
                         }
                     }
+                }
+            ]
+        },
+        "system_feature": {
+            "patterns": [
+                {
+                    "begin": "(?<=(?:\\$sformat))\\s*\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#string_output_specification"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
+                            "include": "#equation"
+                        }
+                    ]
                 },
                 {
-                    "comment": "unknown system function",
-                    "match": "(?<=[^[:word:]$])\\$[[:word:]$]*\\b",
-                    "name": "invalid.illegal.va.system.function"
+                    "begin": "(?<=(?:\\$[fs]scanf))\\s*\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#string_input_specification"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
+                            "include": "#equation"
+                        }
+                    ]
                 }
             ]
         },
