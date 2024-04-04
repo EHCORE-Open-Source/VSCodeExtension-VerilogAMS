@@ -10,9 +10,11 @@ No context.
 ## Known Issues
 No context.
 ## Release Notes
-First draft release for 0.0.1.
+The latest version is 0.0.2.
 ### 0.0.1
 First draft version release
+### 0.0.2
+Reconstructing Verilog-A syntax highlighting.
 -----------------------------------------------------------------------------------------------------------
 ## Working with Markdown
 **Enjoy!**

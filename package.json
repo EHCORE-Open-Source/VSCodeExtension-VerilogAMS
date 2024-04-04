@@ -2,7 +2,7 @@
     "name": "verilogams-support-package",
     "displayName": "Verilog-AMS Extension",
     "description": "Verilog-A and Verilog-AMS support",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "ephoton0210-taiwan",
     "activationEvents": [],
     "private": false,
