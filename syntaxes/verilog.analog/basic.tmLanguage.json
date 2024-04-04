@@ -219,7 +219,7 @@
                             "include": "#variable"
                         },
                         {
-                            "include": "#keyword"
+                            "include": "#module_looping"
                         },
                         {
                             "include": "#analog_block"
@@ -228,6 +228,59 @@
                             "include": "#instance"
                         }
                     ]
+                }
+            ]
+        },
+        "module_looping": {
+            "patterns": [
+                {
+                    "comment": "looping statements",
+                    "match": "\\b(?:for|while|repeat)\\b",
+                    "name": "keyword.control.va.module.looping"
+                },
+                {
+                    "include": "#keyword_feature"
+                },
+                {
+                    "begin": "\\b(?:begin)(?:\\s*:\\s*([[:alpha:]_][[:word:]$]*))?\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "markup.underline"
+                        }
+                    },
+                    "end": "\\b(?:end)\\b",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#property"
+                        },
+                        {
+                            "include": "#discipline"
+                        },
+                        {
+                            "include": "#branch"
+                        },
+                        {
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#variable"
+                        },
+                        {
+                            "include": "#module_looping"
+                        },
+                        {
+                            "include": "#analog_block"
+                        },
+                        {
+                            "include": "#instance"
+                        }
+                    ]           
                 }
             ]
         },
@@ -498,6 +551,9 @@
                             "name": "invalid.module.va.port"
                         }
                     }
+                },
+                {
+                    "include": "#bus_definition"
                 }
             ]
         },
