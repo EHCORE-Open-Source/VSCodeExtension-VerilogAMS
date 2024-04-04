@@ -322,6 +322,49 @@
                             "include": "#instance"
                         }
                     ]           
+                },
+                {
+                    "begin": "\\b(generate)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.module.generate"
+                        }
+                    },
+                    "end": "\\b(endgenerate)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.module.generate"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#property"
+                        },
+                        {
+                            "include": "#discipline"
+                        },
+                        {
+                            "include": "#branch"
+                        },
+                        {
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#variable"
+                        },
+                        {
+                            "include": "#module_looping"
+                        },
+                        {
+                            "include": "#instance"
+                        }
+                    ]
                 }
             ]
         },
@@ -913,6 +956,11 @@
                     "comment": "case statements",
                     "name": "keyword.control.va.case",
                     "match": "\\b(case|endcase)\\b"
+                },
+                {
+                    "comment": "generate region",
+                    "name": "keyword.control.va.case",
+                    "match": "\\b(generate|endgenerate)\\b"
                 },
                 {
                     "comment": "default in case statements",
