@@ -984,6 +984,7 @@
                     "begin": "\\b([[:alpha:]_][[:word:]$]*)\\s*\\(",
                     "beginCaptures": {
                         "1": {
+                            "name": "invalid.va.function",
                             "patterns": [
                                 {
                                     "include": "#function_name"
@@ -994,19 +995,19 @@
                     "end": "\\)",
                     "patterns": [
                         {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#string"
-                        },
-                        {
-                            "include": "#numeric"
+                            "include": "#basic"
                         },
                         {
                             "include": "#definition"
                         },
                         {
+                            "include": "#interface"
+                        },
+                        {
                             "include": "#function"
+                        },
+                        {
+                            "include": "#system"
                         }
                     ]
                 }
@@ -1017,32 +1018,32 @@
                 {
                     "comment": "analog built in functions",
                     "match": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\b",
-                    "name": "entity.name.function.va"
+                    "name": "entity.name.function.va.mathematics"
                 },
                 {
                     "comment": "analysis function",
                     "match": "\\b(?:analysis)\\b",
-                    "name": "entity.name.function.va"
+                    "name": "entity.name.function.va.analysis"
                 },
                 {
                     "comment": "analog filter functions",
                     "match": "\\b(?:dd[tx]|idt(?:mod)?|absdelay|transition|slew|last_crossing|limexp)\\b",
-                    "name": "entity.name.function.va"
+                    "name": "entity.name.function.va.filter"
                 },
                 {
                     "comment": "analog small signal functions",
                     "match": "\\b(?:ac_stim|(?:flicker|white)_noise|noise_table(?:_log)?)\\b",
-                    "name": "entity.name.function.va"
+                    "name": "entity.name.function.va.small_signal"
                 },
                 {
                     "comment": "laplace or zi filter functions",
                     "match": "\\b(?:(?:laplace|zi)_[nz][pd])\\b",
-                    "name": "entity.name.function.va"
+                    "name": "entity.name.function.va.laplace"
                 },
                 {
                     "comment": "nature access functions",
                     "match": "\\b(?:potential|flow)\\b",
-                    "name": "entity.name.function.va"
+                    "name": "entity.name.function.va.nature"
                 }
             ]
         },
