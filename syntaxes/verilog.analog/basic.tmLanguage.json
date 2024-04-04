@@ -118,7 +118,7 @@
                 },
                 {
                     "comment": "compiler directives (timescale)",
-                    "match": "^\\s*(`timescale)\\s*([[:alpha:]_][[:word:]$]*)\\b",
+                    "match": "^\\s*(`timescale)\\s(s)?",
                     "captures": {
                         "1": {
                             "name": "keyword.control.va"
@@ -219,6 +219,9 @@
                             "include": "#variable"
                         },
                         {
+                            "include": "#keyword"
+                        },
+                        {
                             "include": "#analog_block"
                         },
                         {
@@ -259,22 +262,22 @@
             "patterns": [
                 {
                     "comment": "parameter block definition",
-                    "begin": "\\b(localparam|parameter)\\b\\s*(integer|real|string)?\\s*(?:[[:alpha:]_][[:word:]$]*)?\\s*(=)?",
+                    "begin": "\\b((?:alias|local)param|parameter)\\b\\s*(integer|real|string)?\\b",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.va.parameter"
                         },
                         "2": {
                             "name": "keyword.other.va.parameter"
-                        },
-                        "3": {
-                            "name": "punctuation.definition.tag.va.logic"
                         }
                     },
                     "end": ";",
                     "patterns": [
                         {
                             "include": "#basic"
+                        },
+                        {
+                            "include": "#equal"
                         },
                         {
                             "include": "#definition"
@@ -286,6 +289,14 @@
                             "include": "#mathematics"
                         }
                     ]
+                }
+            ]
+        },
+        "equal": {
+            "patterns": [
+                {
+                    "match": "(?<![=<>!])(?:=)(?![=])",
+                    "name": "punctuation.definition.tag.va.logic"
                 }
             ]
         },
@@ -368,7 +379,6 @@
         "interface": {
             "patterns": [
                 {
-                    "comment": "TODO: need to refine the interface function",
                     "begin": "\\b([IV])\\s*\\(",
                     "beginCaptures": {
                         "1": {
@@ -381,16 +391,10 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#mathematics"
-                        },
-                        {
                             "include": "#module_port_name"
+                        },
+                        {
+                            "include": "#bus_definition"
                         }
                     ]
                 }
@@ -409,7 +413,7 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#portbus"
+                            "include": "#port_definition"
                         }
                     ]
                 },
@@ -424,7 +428,7 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#portbus"
+                            "include": "#port_definition"
                         }
                     ]
                 }
@@ -443,28 +447,44 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#portbus"
+                            "include": "#port_definition"
                         }
                     ]
                 }
             ]
         },
-        "portbus": {
+        "port_definition": {
             "patterns": [
                 {
                     "include": "#comment"
                 },
                 {
-                    "include": "#numeric"
-                },
-                {
-                    "include": "#definition"
-                },
-                {
-                    "include": "#mathematics"
+                    "include": "#bus_definition"
                 },
                 {
                     "include": "#port_branch_name"
+                }
+            ]
+        },
+        "bus_definition": {
+            "patterns": [
+                {
+                    "begin": "\\[",
+                    "end": "\\]",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
                 }
             ]
         },
@@ -645,13 +665,13 @@
                     "begin": "(?<=\\b(?:analog))\\s+(begin)\\b",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.control.va.begin"
+                            "name": "keyword.other.va.begin"
                         }
                     },
                     "end": "\\b(end)\\b",
                     "endCaptures": {
                         "1": {
-                            "name": "keyword.control.va.end"
+                            "name": "keyword.other.va.end"
                         }
                     },
                     "patterns": [
@@ -764,13 +784,13 @@
                     "begin": "\\b(begin)\\b",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.control.va.begin"
+                            "name": "keyword.other.va.begin"
                         }
                     },
                     "end": "\\b(end)\\b",
                     "endCaptures": {
                         "1": {
-                            "name": "keyword.control.va.end"
+                            "name": "keyword.other.va.end"
                         }
                     },
                     "patterns": [
