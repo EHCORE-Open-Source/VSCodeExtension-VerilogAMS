@@ -1155,6 +1155,11 @@
                     "name": "support.class.va.system.string strong.va.system.string"
                 },
                 {
+                    "comment": "timescale system tasks",
+                    "match": "\\$(?:printtimescale|timeformat)\\b",
+                    "name": "support.class.va.system.timescale strong.va.system.timescale"
+                },
+                {
                     "comment": "simulation control system tasks",
                     "match": "\\$(?:error|fatal|finish|info|stop|warning)\\b",
                     "name": "support.class.va.system.simulation.control strong.va.system.simulation.control"
@@ -1165,6 +1170,11 @@
                     "name": "support.class.va.system.simulation.time strong.va.system.simulation.time"
                 },
                 {
+                    "comment": "conversion system tasks",
+                    "match": "\\$(?:bitstoreal|realtobits)\\b",
+                    "name": "support.class.va.system.conversion strong.va.system.conversion"
+                },
+                {
                     "comment": "command line input system functions",
                     "match": "\\$(?:test|value)\\$plusargs\\b",
                     "name": "support.class.va.system.command strong.va.system.command"
@@ -1172,7 +1182,7 @@
                 {
                     "comment": "probabilistic distribution system functions",
                     "match": "\\$(?:dist_(?:chi_square|erlang|exponential|normal|poisson|t|uniform)|a?random)\\b",
-                    "name": "support.class.va.system.command strong.va.system.command"
+                    "name": "support.class.va.system.probabilistic strong.va.system.probabilistic"
                 },
                 {
                     "comment": "math system functions",
