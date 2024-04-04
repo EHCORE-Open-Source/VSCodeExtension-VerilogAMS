@@ -170,6 +170,51 @@
                             "include": "#module"
                         }
                     ]
+                },
+                {
+                    "begin": "\\b(paramset)(?:\\s+([[:alpha:]_][[:word:]$]*)(?:\\s+([[:alpha:]_][[:word:]$]*)\\s*;?)?)?\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.paramset"
+                        },
+                        "2": {
+                            "name": "entity.name.function.va.paramset strong.va.paramset"
+                        },
+                        "3": {
+                            "name": "markup.inserted.va.paramset strong.va.paramset"
+                        }
+                    },
+                    "end": "\\b(endparamset)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.paramset"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#param_embedded"
+                        },
+                        {
+                            "include": "#equal"
+                        }
+                    ]
+                }
+            ]
+        },
+        "param_embedded": {
+            "patterns": [
+                {
+                    "match": "(?<![[:word:]$])\\.(?:[[:alpha:]_][[:word:]$]*)\\b",
+                    "name": "variable.parameter.va.parameter.embedded"
                 }
             ]
         },
