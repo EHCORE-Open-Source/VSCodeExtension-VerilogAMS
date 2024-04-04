@@ -690,7 +690,6 @@
                     "comment": "analog block",
                     "begin": "(?<=\\b(?:analog))(?!\\s+begin)\\b",
                     "end": "(?<=;)",
-                    "name": "markup.underline",
                     "patterns": [
                         {
                             "include": "#analog_trigger"
@@ -840,7 +839,22 @@
                     "end": "\\)",
                     "patterns": [
                         {
-                            "include": "#analog_definition"
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
                         },
                         {
                             "include": "#conditional_logic"
@@ -852,7 +866,37 @@
                     "end": "\\)",
                     "patterns": [
                         {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#definition"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
                             "include": "#for_delimiter"
+                        }
+                    ]
+                },
+                {
+                    "include": "#system_feature"
+                },
+                {
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#analog_definition"
                         }
                     ]
                 }
@@ -884,12 +928,16 @@
             "patterns": [
                 {
                     "match": "[\\+\\-<>=!~&^|]+",
-                    "name": "invalid",
+                    "name": "invalid.va.conditional.logic",
                     "captures": {
                         "0": {
                             "patterns": [
                                 {
-                                    "match": "(?<=[[:word:]$\\s])(?:[<>!=]=|\\+{1,2}|\\-{1,2}|[<>|&!~])$",
+                                    "match": "![\\+\\-]?(?![<>=!~&^|])",
+                                    "name": "keyword.operator.va.conditional.logic"
+                                },
+                                {
+                                    "match": "(?<=[[:word:]$\\s])(?:[<>!=]=|\\+{1,2}|\\-{1,2}|[<>|&])$",
                                     "name": "keyword.operator.va.conditional.logic"
                                 },
                                 {
@@ -974,7 +1022,7 @@
         "system": {
             "patterns": [
                 {
-                    "match": "(\\$[[:alpha:]_][[:word:]$]*)",
+                    "match": "(\\$[[:alpha:]_][[:word:]$]*)\\b",
                     "name": "invalid.va.system",
                     "captures": {
                         "1": {
@@ -985,9 +1033,6 @@
                             ]
                         }
                     }
-                },
-                {
-                    "include": "#system_feature"
                 }
             ]
         },
@@ -1068,7 +1113,7 @@
         "system_feature": {
             "patterns": [
                 {
-                    "begin": "(?<=(?:\\$sformat))\\s*\\(",
+                    "begin": "(?<=(?:\\$sformat)\\s*)\\(",
                     "end": "\\)",
                     "patterns": [
                         {
@@ -1138,26 +1183,6 @@
                             "include": "#equation"
                         }
                     ]
-                }
-            ]
-        },
-        "operator": {
-            "patterns": [
-                {
-                    "comment": "unary_operator ::= + | - | ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
-                    "name": "keyword.operator.va.operator.unary strong.va.operator.unary"
-                },
-                {
-                    "comment": "binary_operator ::= + | - | * | / | % | == | != | === | !== | && | || | ** | < | <= | > | >= | & | | | ^ | ^~ | ~^ | >> | << | >>> | <<<",
-                    "name": "keyword.operator.va.operator.binary strong.va.operator.binary"
-                },
-                {
-                    "comment": "unary_module_path_operator ::= ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
-                    "name": "keyword.operator.va.operator.unary_module strong.va.operator.unary_module"
-                },
-                {
-                    "comment": "binary_module_path_operator ::= == | != | && | || | & | | | ^ | ^~ | ~^",
-                    "name": "keyword.operator.va.operator.binary_module strong.va.operator.binary_module"
                 }
             ]
         },
