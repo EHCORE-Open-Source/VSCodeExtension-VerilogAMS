@@ -680,6 +680,9 @@
                         },
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 },
@@ -694,6 +697,9 @@
                         },
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 }
@@ -737,6 +743,9 @@
                     "patterns": [
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#conditional_logic"
                         }
                     ]
                 }
@@ -772,9 +781,6 @@
                 },
                 {
                     "include": "#system"
-                },
-                {
-                    "include": "#equation"
                 }
             ]
         },
@@ -796,6 +802,9 @@
                     "patterns": [
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 },
@@ -852,11 +861,26 @@
         "for_delimiter": {
             "patterns": [
                 {
+                    "begin": "(?<=;)",
+                    "end": "(?=;)",
+                    "patterns": [
+                        {
+                            "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#conditional_logic"
+                        }
+                    ]
+                },
+                {
                     "match": ";",
                     "name": "constant.regexp.va.delimiter strong.va.delimiter"
                 },
                 {
                     "include": "#analog_definition"
+                },
+                {
+                    "include": "#equal"
                 }
             ]
         },
