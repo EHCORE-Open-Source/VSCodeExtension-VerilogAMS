@@ -8,13 +8,14 @@ Support Verilog-A or Verilog-AMS development environment
 ## Extension Settings
 No context.
 ## Known Issues
-No context.
+Support limited generate syntax.
 ## Release Notes
 The latest version is 0.0.2.
 ### 0.0.1
 First draft version release
 ### 0.0.2
 Reconstructing Verilog-A syntax highlighting.
+
 -----------------------------------------------------------------------------------------------------------
 ## Working with Markdown
 **Enjoy!**
