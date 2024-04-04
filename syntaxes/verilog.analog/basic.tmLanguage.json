@@ -762,10 +762,10 @@
                     "include": "#infinite"
                 },
                 {
-                    "include": "#keyword"
+                    "include": "#interface"
                 },
                 {
-                    "include": "#interface"
+                    "include": "#keyword"
                 },
                 {
                     "include": "#function"
@@ -827,7 +827,7 @@
         "keyword_feature": {
             "patterns": [
                 {
-                    "begin": "(?<=\\b(?:if))\\s*\\(",
+                    "begin": "(?<=\\b(?:if|while)\\s*)\\(",
                     "end": "\\)",
                     "patterns": [
                         {
@@ -838,6 +838,30 @@
                         }
                     ]
                 },
+                {
+                    "begin": "(?<=\\b(?:for)\\s*)\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#for_delimiter"
+                        }
+                    ]
+                }
+            ]
+        },
+        "for_delimiter": {
+            "patterns": [
+                {
+                    "match": ";",
+                    "name": "constant.regexp.va.delimiter strong.va.delimiter"
+                },
+                {
+                    "include": "#analog_definition"
+                }
+            ]
+        },
+        "function_feature": {
+            "patterns": [
                 {
                     "begin": "(?<=(?:\\$sformat))\\s*\\(",
                     "end": "\\)",
