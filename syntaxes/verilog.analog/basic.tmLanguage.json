@@ -994,44 +994,74 @@
         "system_task": {
             "patterns": [
                 {
-                    "comment": "built-in functions",
-                    "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|temperature|warning|write)\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "support.class.va strong.va"
-                        }
-                    }
+                    "comment": "display system tasks",
+                    "match": "\\$(?:debug|display|monitor|strobe|write)\\b",
+                    "name": "support.class.va.system.display strong.va.system.display"
                 },
                 {
-                    "comment": "flushing output",
-                    "match": "\\$(fflush)\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "strong.va"
-                        }
-                    }
+                    "comment": "file input-output system tasks",
+                    "match": "\\$(?:f(?:close|debug|display|eof|error|flush|gets|monitor|open|scanf|seek|strobe|tell|write)|rewind)\\b",
+                    "name": "support.class.va.system.file strong.va.system.file"
                 },
                 {
-                    "comment": "formatting data from/to a string",
-                    "match": "\\$(s(format|scanf|write))\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "strong.va"
-                        }
-                    }
+                    "comment": "string system tasks",
+                    "match": "\\$s(?:format|scanf|write)\\b",
+                    "name": "support.class.va.system.string strong.va.system.string"
                 },
                 {
-                    "comment": "file system",
-                    "match": "\\$(f(open|close|gets|scanf))\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "strong.va"
-                        }
-                    }
+                    "comment": "simulation control system tasks",
+                    "match": "\\$(?:error|fatal|finish|info|stop|warning)\\b",
+                    "name": "support.class.va.system.simulation.control strong.va.system.simulation.control"
+                },
+                {
+                    "comment": "simulation time system tasks",
+                    "match": "\\$(?:abstime)\\b",
+                    "name": "support.class.va.system.simulation.time strong.va.system.simulation.time"
+                },
+                {
+                    "comment": "command line input system functions",
+                    "match": "\\$(?:test|value)\\$plusargs\\b",
+                    "name": "support.class.va.system.command strong.va.system.command"
+                },
+                {
+                    "comment": "math system functions",
+                    "match": "\\$(?:a?(?:cos|sin|tan)h?|atan2|ceil|clog2|exp|floor|hypot|ln|log10|pow|sqrt)\\b",
+                    "name": "support.class.va.system.mathematics strong.va.system.mathematics"
+                },
+                {
+                    "comment": "analog kernal parameter system functions",
+                    "match": "\\$(?:temperature|vt|simparam(?:\\$str)?)\\b",
+                    "name": "support.class.va.system.analog.parameter strong.va.system.analog.parameter"
+                },
+                {
+                    "comment": "dynamic simulation probe system functions",
+                    "match": "\\$(?:simprobe)\\b",
+                    "name": "support.class.va.system.dynamic.probe strong.va.system.dynamic.probe"
+                },
+                {
+                    "comment": "analog kernal control system tasks and functions",
+                    "match": "\\$(?:bound_step|discontinuity|limit)\\b",
+                    "name": "support.class.va.system.analog.control strong.va.system.analog.control"
+                },
+                {
+                    "comment": "hierarchical parameter system functions",
+                    "match": "\\$(?:angle|[hv]flip|mfactor|[xy]position)\\b",
+                    "name": "support.class.va.system.hierarchical.parameter strong.va.system.hierarchical.parameter"
+                },
+                {
+                    "comment": "explicit binding detection system functions",
+                    "match": "\\$(?:param_given|port_connected)\\b",
+                    "name": "support.class.va.system.explicit strong.va.system.explicit"
+                },
+                {
+                    "comment": "analog node alias system functions",
+                    "match": "\\$(?:analog_(?:node|port)_alias)\\b",
+                    "name": "support.class.va.system.analog.alias strong.va.system.analog.alias"
+                },
+                {
+                    "comment": "table based interpolation and lookup system functions",
+                    "match": "\\$(?:table_model)\\b",
+                    "name": "support.class.va.system.table strong.va.system.table"
                 }
             ]
         },
@@ -1235,7 +1265,7 @@
                 {
                     "comment": "instance module name",
                     "match": "([[:alpha:]_][[:word:]$]*)",
-                    "name": "constant.character.set.regexp.va.instance strong.va.instance"
+                    "name": "entity.name.tag.css.va.instance strong.va.instance"
                 },
                 {
                     "comment": "instance module name",
