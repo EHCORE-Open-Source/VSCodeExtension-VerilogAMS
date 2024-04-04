@@ -106,10 +106,10 @@
             "patterns": [
                 {
                     "comment": "compiler directives (define)",
-                    "match": "^\\s*(`define)\\s*([[:alpha:]_][[:word:]$]*)\\b",
+                    "match": "(`define)(?:\\s+([[:alpha:]_][[:word:]$]*))?\\b",
                     "captures": {
                         "1": {
-                            "name": "keyword.control.va"
+                            "name": "keyword.control.va.preprocess"
                         },
                         "2": {
                             "name": "variable.other.constant.va"
@@ -118,30 +118,26 @@
                 },
                 {
                     "comment": "compiler directives (timescale)",
-                    "match": "^\\s*(`timescale)\\s*([[:alpha:]_][[:word:]$]*)\\b",
-                    "captures": {
-                        "1": {
-                            "name": "keyword.control.va"
-                        },
-                        "2": {
-                            "name": "variable.other.constant.va"
-                        }
-                    }
+                    "match": "(?:`timescale)\\b",
+                    "name": "keyword.control.va.preprocess"
+                },
+                {
+                    "comment": "compiler directives (if-else)",
+                    "match": "(?:`(?:ifn?def|else|elsif|endif))\\b",
+                    "name": "keyword.control.va.preprocess"
+                },
+                {
+                    "comment": "compiler directives (begin-end)",
+                    "match": "(?:`(?:begin|end)_keywords)\\b",
+                    "name": "keyword.control.va.preprocess"
                 },
                 {
                     "comment": "compiler directives (others)",
-                    "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
-                    "name": "keyword.control.va"
+                    "match": "(?:`(?:default\\_transition|include|undef|pragma))\\b",
+                    "name": "keyword.control.va.preprocess"
                 },
                 {
-                    "include": "#definition"
-                }
-            ]
-        },
-        "definition": {
-            "patterns": [
-                {
-                    "match": "`[[:alpha:]_][[:word:]$]*\\b",
+                    "match": "(?:`[[:alpha:]_][[:word:]$]*)\\b",
                     "name": "variable.other.constant.va.definition strong.va.definition"
                 }
             ]
@@ -170,6 +166,51 @@
                             "include": "#module"
                         }
                     ]
+                },
+                {
+                    "begin": "\\b(paramset)(?:\\s+([[:alpha:]_][[:word:]$]*)(?:\\s+([[:alpha:]_][[:word:]$]*)\\s*;?)?)?\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.paramset"
+                        },
+                        "2": {
+                            "name": "entity.name.function.va.paramset strong.va.paramset"
+                        },
+                        "3": {
+                            "name": "markup.inserted.va.paramset strong.va.paramset"
+                        }
+                    },
+                    "end": "\\b(endparamset)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.other.va.paramset"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#infinite"
+                        },
+                        {
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#param_embedded"
+                        },
+                        {
+                            "include": "#equal"
+                        }
+                    ]
+                }
+            ]
+        },
+        "param_embedded": {
+            "patterns": [
+                {
+                    "match": "(?<![[:word:]$])\\.(?:[[:alpha:]_][[:word:]$]*)\\b",
+                    "name": "variable.parameter.va.parameter.embedded"
                 }
             ]
         },
@@ -185,7 +226,7 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#module_port"
@@ -201,7 +242,7 @@
                             "include": "#basic"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#property"
@@ -219,7 +260,106 @@
                             "include": "#variable"
                         },
                         {
+                            "include": "#module_looping"
+                        },
+                        {
                             "include": "#analog_block"
+                        },
+                        {
+                            "include": "#instance"
+                        }
+                    ]
+                }
+            ]
+        },
+        "module_looping": {
+            "patterns": [
+                {
+                    "comment": "looping statements",
+                    "match": "\\b(?:for|while|repeat)\\b",
+                    "name": "keyword.control.va.module.looping"
+                },
+                {
+                    "include": "#keyword_feature"
+                },
+                {
+                    "begin": "\\b(?:begin)(?:\\s*:\\s*([[:alpha:]_][[:word:]$]*))?\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "markup.underline"
+                        }
+                    },
+                    "end": "\\b(?:end)\\b",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#property"
+                        },
+                        {
+                            "include": "#discipline"
+                        },
+                        {
+                            "include": "#branch"
+                        },
+                        {
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#variable"
+                        },
+                        {
+                            "include": "#module_looping"
+                        },
+                        {
+                            "include": "#analog_block"
+                        },
+                        {
+                            "include": "#instance"
+                        }
+                    ]           
+                },
+                {
+                    "begin": "\\b(generate)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.module.generate"
+                        }
+                    },
+                    "end": "\\b(endgenerate)\\b",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control.va.module.generate"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#property"
+                        },
+                        {
+                            "include": "#discipline"
+                        },
+                        {
+                            "include": "#branch"
+                        },
+                        {
+                            "include": "#parameter"
+                        },
+                        {
+                            "include": "#variable"
+                        },
+                        {
+                            "include": "#module_looping"
                         },
                         {
                             "include": "#instance"
@@ -259,16 +399,13 @@
             "patterns": [
                 {
                     "comment": "parameter block definition",
-                    "begin": "\\b(localparam|parameter)\\b\\s*(integer|real|string)?\\s*(?:[[:alpha:]_][[:word:]$]*)?\\s*(=)?",
+                    "begin": "\\b((?:alias|local)param|parameter)\\b\\s*(integer|real|string)?\\b",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.va.parameter"
                         },
                         "2": {
                             "name": "keyword.other.va.parameter"
-                        },
-                        "3": {
-                            "name": "punctuation.definition.tag.va.logic"
                         }
                     },
                     "end": ";",
@@ -277,7 +414,10 @@
                             "include": "#basic"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#equal"
+                        },
+                        {
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#range"
@@ -286,6 +426,14 @@
                             "include": "#mathematics"
                         }
                     ]
+                }
+            ]
+        },
+        "equal": {
+            "patterns": [
+                {
+                    "match": "(?<![=<>!])(?:=)(?![=])",
+                    "name": "punctuation.definition.tag.va.logic"
                 }
             ]
         },
@@ -317,7 +465,7 @@
                             "include": "#infinite"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#mathematics"
@@ -353,7 +501,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#interface"
@@ -368,7 +516,6 @@
         "interface": {
             "patterns": [
                 {
-                    "comment": "TODO: need to refine the interface function",
                     "begin": "\\b([IV])\\s*\\(",
                     "beginCaptures": {
                         "1": {
@@ -381,16 +528,10 @@
                             "include": "#comment"
                         },
                         {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#mathematics"
-                        },
-                        {
                             "include": "#module_port_name"
+                        },
+                        {
+                            "include": "#bus_definition"
                         }
                     ]
                 }
@@ -409,7 +550,7 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#portbus"
+                            "include": "#port_definition"
                         }
                     ]
                 },
@@ -424,7 +565,7 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#portbus"
+                            "include": "#port_definition"
                         }
                     ]
                 }
@@ -443,28 +584,44 @@
                     "end": ";",
                     "patterns": [
                         {
-                            "include": "#portbus"
+                            "include": "#port_definition"
                         }
                     ]
                 }
             ]
         },
-        "portbus": {
+        "port_definition": {
             "patterns": [
                 {
                     "include": "#comment"
                 },
                 {
-                    "include": "#numeric"
-                },
-                {
-                    "include": "#definition"
-                },
-                {
-                    "include": "#mathematics"
+                    "include": "#bus_definition"
                 },
                 {
                     "include": "#port_branch_name"
+                }
+            ]
+        },
+        "bus_definition": {
+            "patterns": [
+                {
+                    "begin": "\\[",
+                    "end": "\\]",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#numeric"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#mathematics"
+                        }
+                    ]
                 }
             ]
         },
@@ -478,6 +635,9 @@
                             "name": "invalid.module.va.port"
                         }
                     }
+                },
+                {
+                    "include": "#bus_definition"
                 }
             ]
         },
@@ -500,7 +660,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#mathematics"
@@ -577,7 +737,7 @@
                     "include": "#numeric"
                 },
                 {
-                    "include": "#definition"
+                    "include": "#preprocess"
                 },
                 {
                     "include": "#mathematics"
@@ -645,13 +805,13 @@
                     "begin": "(?<=\\b(?:analog))\\s+(begin)\\b",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.control.va.begin"
+                            "name": "keyword.other.va.begin"
                         }
                     },
                     "end": "\\b(end)\\b",
                     "endCaptures": {
                         "1": {
-                            "name": "keyword.control.va.end"
+                            "name": "keyword.other.va.end"
                         }
                     },
                     "patterns": [
@@ -660,6 +820,9 @@
                         },
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 },
@@ -667,13 +830,15 @@
                     "comment": "analog block",
                     "begin": "(?<=\\b(?:analog))(?!\\s+begin)\\b",
                     "end": "(?<=;)",
-                    "name": "markup.underline",
                     "patterns": [
                         {
                             "include": "#analog_trigger"
                         },
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 }
@@ -717,6 +882,9 @@
                     "patterns": [
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#conditional_logic"
                         }
                     ]
                 }
@@ -736,25 +904,22 @@
                     "include": "#basic"
                 },
                 {
-                    "include": "#definition"
+                    "include": "#preprocess"
                 },
                 {
                     "include": "#infinite"
                 },
                 {
-                    "include": "#keyword"
+                    "include": "#interface"
                 },
                 {
-                    "include": "#interface"
+                    "include": "#keyword"
                 },
                 {
                     "include": "#function"
                 },
                 {
                     "include": "#system"
-                },
-                {
-                    "include": "#equation"
                 }
             ]
         },
@@ -764,18 +929,21 @@
                     "begin": "\\b(begin)\\b",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.control.va.begin"
+                            "name": "keyword.other.va.begin"
                         }
                     },
                     "end": "\\b(end)\\b",
                     "endCaptures": {
                         "1": {
-                            "name": "keyword.control.va.end"
+                            "name": "keyword.other.va.end"
                         }
                     },
                     "patterns": [
                         {
                             "include": "#analog_definition"
+                        },
+                        {
+                            "include": "#equation"
                         }
                     ]
                 },
@@ -788,6 +956,11 @@
                     "comment": "case statements",
                     "name": "keyword.control.va.case",
                     "match": "\\b(case|endcase)\\b"
+                },
+                {
+                    "comment": "generate region",
+                    "name": "keyword.control.va.case",
+                    "match": "\\b(generate|endgenerate)\\b"
                 },
                 {
                     "comment": "default in case statements",
@@ -807,11 +980,26 @@
         "keyword_feature": {
             "patterns": [
                 {
-                    "begin": "(?<=\\b(?:if))\\s*\\(",
+                    "begin": "(?<=\\b(?:if|while)\\s*)\\(",
                     "end": "\\)",
                     "patterns": [
                         {
-                            "include": "#analog_definition"
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
                         },
                         {
                             "include": "#conditional_logic"
@@ -819,7 +1007,273 @@
                     ]
                 },
                 {
-                    "begin": "(?<=(?:\\$sformat))\\s*\\(",
+                    "begin": "(?<=\\b(?:for)\\s*)\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#keyword"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
+                            "include": "#for_delimiter"
+                        }
+                    ]
+                },
+                {
+                    "include": "#system_feature"
+                },
+                {
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#analog_definition"
+                        }
+                    ]
+                }
+            ]
+        },
+        "for_delimiter": {
+            "patterns": [
+                {
+                    "match": ";",
+                    "name": "constant.regexp.va.delimiter strong.va.delimiter"
+                },
+                {
+                    "include": "#analog_definition"
+                },
+                {
+                    "include": "#equal"
+                }
+            ]
+        },
+        "equation": {
+            "patterns": [
+                {
+                    "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
+                    "name": "punctuation.definition.tag.va.logic"
+                }
+            ]
+        },
+        "conditional_logic": {
+            "patterns": [
+                {
+                    "match": "[\\+\\-<>=!~&^|]+",
+                    "name": "invalid.va.conditional.logic",
+                    "captures": {
+                        "0": {
+                            "patterns": [
+                                {
+                                    "match": "![\\+\\-]?(?![<>=!~&^|])",
+                                    "name": "keyword.operator.va.conditional.logic"
+                                },
+                                {
+                                    "match": "(?<=[[:word:]$\\s])(?:[<>!=]=|\\+{1,2}|\\-{1,2}|[<>|&])$",
+                                    "name": "keyword.operator.va.conditional.logic"
+                                },
+                                {
+                                    "match": "(?<=[[:word:]$\\s])(?:\\|\\||&&)$",
+                                    "name": "punctuation.definition.tag.logic"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "function": {
+            "patterns": [
+                {
+                    "begin": "\\b([[:alpha:]_][[:word:]$]*)\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "invalid.va.function",
+                            "patterns": [
+                                {
+                                    "include": "#function_name"
+                                }
+                            ]
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#basic"
+                        },
+                        {
+                            "include": "#preprocess"
+                        },
+                        {
+                            "include": "#interface"
+                        },
+                        {
+                            "include": "#function"
+                        },
+                        {
+                            "include": "#system"
+                        }
+                    ]
+                }
+            ]
+        },
+        "function_name": {
+            "patterns": [
+                {
+                    "comment": "analog built in functions",
+                    "match": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\b",
+                    "name": "entity.name.function.va.mathematics"
+                },
+                {
+                    "comment": "analysis function",
+                    "match": "\\b(?:analysis)\\b",
+                    "name": "entity.name.function.va.analysis"
+                },
+                {
+                    "comment": "analog filter functions",
+                    "match": "\\b(?:dd[tx]|idt(?:mod)?|absdelay|transition|slew|last_crossing|limexp)\\b",
+                    "name": "entity.name.function.va.filter"
+                },
+                {
+                    "comment": "analog small signal functions",
+                    "match": "\\b(?:ac_stim|(?:flicker|white)_noise|noise_table(?:_log)?)\\b",
+                    "name": "entity.name.function.va.small_signal"
+                },
+                {
+                    "comment": "laplace or zi filter functions",
+                    "match": "\\b(?:(?:laplace|zi)_[nz][pd])\\b",
+                    "name": "entity.name.function.va.laplace"
+                },
+                {
+                    "comment": "nature access functions",
+                    "match": "\\b(?:potential|flow)\\b",
+                    "name": "entity.name.function.va.nature"
+                }
+            ]
+        },
+        "system": {
+            "patterns": [
+                {
+                    "match": "(\\$[[:alpha:]_][[:word:]$]*)\\b",
+                    "name": "invalid.va.system",
+                    "captures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "include": "#system_task"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "system_task": {
+            "patterns": [
+                {
+                    "comment": "display system tasks",
+                    "match": "\\$(?:debug|display|monitor|strobe|write)\\b",
+                    "name": "support.class.va.system.display strong.va.system.display"
+                },
+                {
+                    "comment": "file input-output system tasks",
+                    "match": "\\$(?:f(?:close|debug|display|eof|error|flush|gets|monitor|open|scanf|seek|strobe|tell|write)|rewind)\\b",
+                    "name": "support.class.va.system.file strong.va.system.file"
+                },
+                {
+                    "comment": "string system tasks",
+                    "match": "\\$s(?:format|scanf|write)\\b",
+                    "name": "support.class.va.system.string strong.va.system.string"
+                },
+                {
+                    "comment": "timescale system tasks",
+                    "match": "\\$(?:printtimescale|timeformat)\\b",
+                    "name": "support.class.va.system.timescale strong.va.system.timescale"
+                },
+                {
+                    "comment": "simulation control system tasks",
+                    "match": "\\$(?:error|fatal|finish|info|stop|warning)\\b",
+                    "name": "support.class.va.system.simulation.control strong.va.system.simulation.control"
+                },
+                {
+                    "comment": "simulation time system tasks",
+                    "match": "\\$(?:abstime)\\b",
+                    "name": "support.class.va.system.simulation.time strong.va.system.simulation.time"
+                },
+                {
+                    "comment": "conversion system tasks",
+                    "match": "\\$(?:bitstoreal|realtobits)\\b",
+                    "name": "support.class.va.system.conversion strong.va.system.conversion"
+                },
+                {
+                    "comment": "command line input system functions",
+                    "match": "\\$(?:test|value)\\$plusargs\\b",
+                    "name": "support.class.va.system.command strong.va.system.command"
+                },
+                {
+                    "comment": "probabilistic distribution system functions",
+                    "match": "\\$(?:dist_(?:chi_square|erlang|exponential|normal|poisson|t|uniform)|a?random)\\b",
+                    "name": "support.class.va.system.probabilistic strong.va.system.probabilistic"
+                },
+                {
+                    "comment": "math system functions",
+                    "match": "\\$(?:a?(?:cos|sin|tan)h?|atan2|ceil|clog2|exp|floor|hypot|ln|log10|pow|sqrt)\\b",
+                    "name": "support.class.va.system.mathematics strong.va.system.mathematics"
+                },
+                {
+                    "comment": "analog kernal parameter system functions",
+                    "match": "\\$(?:temperature|vt|simparam(?:\\$str)?)\\b",
+                    "name": "support.class.va.system.analog.parameter strong.va.system.analog.parameter"
+                },
+                {
+                    "comment": "dynamic simulation probe system functions",
+                    "match": "\\$(?:simprobe)\\b",
+                    "name": "support.class.va.system.dynamic.probe strong.va.system.dynamic.probe"
+                },
+                {
+                    "comment": "analog kernal control system tasks and functions",
+                    "match": "\\$(?:bound_step|discontinuity|limit)\\b",
+                    "name": "support.class.va.system.analog.control strong.va.system.analog.control"
+                },
+                {
+                    "comment": "hierarchical parameter system functions",
+                    "match": "\\$(?:angle|[hv]flip|mfactor|[xy]position)\\b",
+                    "name": "support.class.va.system.hierarchical.parameter strong.va.system.hierarchical.parameter"
+                },
+                {
+                    "comment": "explicit binding detection system functions",
+                    "match": "\\$(?:param_given|port_connected)\\b",
+                    "name": "support.class.va.system.explicit strong.va.system.explicit"
+                },
+                {
+                    "comment": "analog node alias system functions",
+                    "match": "\\$(?:analog_(?:node|port)_alias)\\b",
+                    "name": "support.class.va.system.analog.alias strong.va.system.analog.alias"
+                },
+                {
+                    "comment": "table based interpolation and lookup system functions",
+                    "match": "\\$(?:table_model)\\b",
+                    "name": "support.class.va.system.table strong.va.system.table"
+                }
+            ]
+        },
+        "system_feature": {
+            "patterns": [
+                {
+                    "begin": "(?<=(?:\\$sformat)\\s*)\\(",
                     "end": "\\)",
                     "patterns": [
                         {
@@ -832,7 +1286,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#infinite"
@@ -868,7 +1322,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#infinite"
@@ -889,173 +1343,6 @@
                             "include": "#equation"
                         }
                     ]
-                }
-            ]
-        },
-        "equation": {
-            "patterns": [
-                {
-                    "match": "(?<=[[:word:]$\\s])(?:=|<\\+)(?=\\s)",
-                    "name": "punctuation.definition.tag.va.logic"
-                }
-            ]
-        },
-        "conditional_logic": {
-            "patterns": [
-                {
-                    "match": "[\\+\\-<>=!~&^|]+",
-                    "name": "invalid",
-                    "captures": {
-                        "0": {
-                            "patterns": [
-                                {
-                                    "match": "(?<=[[:word:]$\\s])(?:[<>!=]=|\\+{1,2}|\\-{1,2}|[<>|&!~])$",
-                                    "name": "keyword.operator.va.conditional.logic"
-                                },
-                                {
-                                    "match": "(?<=[[:word:]$\\s])(?:\\|\\||&&)$",
-                                    "name": "punctuation.definition.tag.logic"
-                                }
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        "function": {
-            "patterns": [
-                {
-                    "begin": "\\b([[:alpha:]_][[:word:]$]*)\\s*\\(",
-                    "beginCaptures": {
-                        "1": {
-                            "patterns": [
-                                {
-                                    "include": "#function_name"
-                                }
-                            ]
-                        }
-                    },
-                    "end": "\\)",
-                    "patterns": [
-                        {
-                            "include": "#comment"
-                        },
-                        {
-                            "include": "#string"
-                        },
-                        {
-                            "include": "#numeric"
-                        },
-                        {
-                            "include": "#definition"
-                        },
-                        {
-                            "include": "#function"
-                        }
-                    ]
-                }
-            ]
-        },
-        "function_name": {
-            "patterns": [
-                {
-                    "comment": "analog built in functions",
-                    "match": "\\b(ln|log|exp|sqrt|min|max|abs|pow|floor|ceil|a?(?:sin|cos|tan)h?|atan2|hypot)\\b",
-                    "name": "entity.name.function.va"
-                },
-                {
-                    "comment": "analysis function",
-                    "match": "\\b(?:analysis)\\b",
-                    "name": "entity.name.function.va"
-                },
-                {
-                    "comment": "analog filter functions",
-                    "match": "\\b(?:dd[tx]|idt(?:mod)?|absdelay|transition|slew|last_crossing|limexp)\\b",
-                    "name": "entity.name.function.va"
-                },
-                {
-                    "comment": "analog small signal functions",
-                    "match": "\\b(?:ac_stim|(?:flicker|white)_noise|noise_table(?:_log)?)\\b",
-                    "name": "entity.name.function.va"
-                },
-                {
-                    "comment": "laplace or zi filter functions",
-                    "match": "\\b(?:(?:laplace|zi)_[nz][pd])\\b",
-                    "name": "entity.name.function.va"
-                },
-                {
-                    "comment": "nature access functions",
-                    "match": "\\b(?:potential|flow)\\b",
-                    "name": "entity.name.function.va"
-                }
-            ]
-        },
-        "system": {
-            "patterns": [
-                {
-                    "comment": "built-in functions",
-                    "match": "\\$(abstime|a?random|bound\\_step|discontinuity|display|driver\\_(count|delay|(next\\_)?(state|strength)|type)|error|fatal|finish|info|limit|root|stop|temperature|warning|write)\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "support.class.va strong.va"
-                        }
-                    }
-                },
-                {
-                    "comment": "flushing output",
-                    "match": "\\$(fflush)\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "strong.va"
-                        }
-                    }
-                },
-                {
-                    "comment": "formatting data from/to a string",
-                    "match": "\\$(s(format|scanf|write))\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "strong.va"
-                        }
-                    }
-                },
-                {
-                    "comment": "file system",
-                    "match": "\\$(f(open|close|gets))\\b",
-                    "name": "support.class.va",
-                    "captures": {
-                        "0": {
-                            "name": "strong.va"
-                        }
-                    }
-                },
-                {
-                    "comment": "unknown system function",
-                    "match": "(?<=[^[:word:]$])\\$[[:word:]$]*\\b",
-                    "name": "invalid.illegal.va.system.function"
-                }
-            ]
-        },
-        "operator": {
-            "patterns": [
-                {
-                    "comment": "unary_operator ::= + | - | ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
-                    "name": "keyword.operator.va.operator.unary strong.va.operator.unary"
-                },
-                {
-                    "comment": "binary_operator ::= + | - | * | / | % | == | != | === | !== | && | || | ** | < | <= | > | >= | & | | | ^ | ^~ | ~^ | >> | << | >>> | <<<",
-                    "name": "keyword.operator.va.operator.binary strong.va.operator.binary"
-                },
-                {
-                    "comment": "unary_module_path_operator ::= ! | ~ | & | ~& | | | ~| | ^ | ~^ | ^~",
-                    "name": "keyword.operator.va.operator.unary_module strong.va.operator.unary_module"
-                },
-                {
-                    "comment": "binary_module_path_operator ::= == | != | && | || | & | | | ^ | ^~ | ~^",
-                    "name": "keyword.operator.va.operator.binary_module strong.va.operator.binary_module"
                 }
             ]
         },
@@ -1122,7 +1409,7 @@
                             "include": "#basic"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#mathematics"
@@ -1149,7 +1436,7 @@
                             "include": "#basic"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#mathematics"
@@ -1163,7 +1450,7 @@
                 {
                     "comment": "instance module name",
                     "match": "([[:alpha:]_][[:word:]$]*)",
-                    "name": "constant.character.set.regexp.va.instance strong.va.instance"
+                    "name": "entity.name.tag.css.va.instance strong.va.instance"
                 },
                 {
                     "comment": "instance module name",
@@ -1177,7 +1464,7 @@
                             "include": "#numeric"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#mathematics"
@@ -1208,7 +1495,7 @@
                             "include": "#basic"
                         },
                         {
-                            "include": "#definition"
+                            "include": "#preprocess"
                         },
                         {
                             "include": "#mathematics"

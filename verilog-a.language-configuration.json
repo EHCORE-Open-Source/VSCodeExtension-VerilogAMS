@@ -13,7 +13,6 @@
         [ "config", "endconfig" ],
         [ "discipline", "enddiscipline" ],
         [ "function", "endfunction" ],
-        [ "generate", "endgenerate" ],
         [ "module", "endmodule" ],
         [ "nature", "endnature" ],
         [ "paramset", "endparamset" ],
