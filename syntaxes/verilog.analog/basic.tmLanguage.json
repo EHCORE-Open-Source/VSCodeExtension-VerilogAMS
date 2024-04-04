@@ -861,18 +861,6 @@
         "for_delimiter": {
             "patterns": [
                 {
-                    "begin": "(?<=;)",
-                    "end": "(?=;)",
-                    "patterns": [
-                        {
-                            "include": "#analog_definition"
-                        },
-                        {
-                            "include": "#conditional_logic"
-                        }
-                    ]
-                },
-                {
                     "match": ";",
                     "name": "constant.regexp.va.delimiter strong.va.delimiter"
                 },
