@@ -106,10 +106,10 @@
             "patterns": [
                 {
                     "comment": "compiler directives (define)",
-                    "match": "^\\s*(`define)(?:\\s+([[:alpha:]_][[:word:]$]*))?\\b",
+                    "match": "(`define)(?:\\s+([[:alpha:]_][[:word:]$]*))?\\b",
                     "captures": {
                         "1": {
-                            "name": "keyword.control.va"
+                            "name": "keyword.control.va.preprocess"
                         },
                         "2": {
                             "name": "variable.other.constant.va"
@@ -118,33 +118,26 @@
                 },
                 {
                     "comment": "compiler directives (timescale)",
-                    "match": "^\\s*(`timescale)\\s(s)?",
-                    "captures": {
-                        "1": {
-                            "name": "keyword.control.va"
-                        },
-                        "2": {
-                            "name": "variable.other.constant.va"
-                        }
-                    }
+                    "match": "(?:`timescale)\\b",
+                    "name": "keyword.control.va.preprocess"
                 },
                 {
                     "comment": "compiler directives (if-else)",
-                    "match": "^\\s*(`(?:ifdef|else|endif))\\b",
-                    "name": "keyword.control.va"
+                    "match": "(?:`(?:ifn?def|else|elsif|endif))\\b",
+                    "name": "keyword.control.va.preprocess"
                 },
                 {
                     "comment": "compiler directives (begin-end)",
-                    "match": "^\\s*(`(?:begin|end)_keywords)\\b",
-                    "name": "keyword.control.va"
+                    "match": "(?:`(?:begin|end)_keywords)\\b",
+                    "name": "keyword.control.va.preprocess"
                 },
                 {
                     "comment": "compiler directives (others)",
-                    "match": "^\\s*(`(?:default\\_(?:discipline|transition)|include|undef))\\b",
-                    "name": "keyword.control.va"
+                    "match": "(?:`(?:default\\_transition|include|undef|pragma))\\b",
+                    "name": "keyword.control.va.preprocess"
                 },
                 {
-                    "match": "`[[:alpha:]_][[:word:]$]*\\b",
+                    "match": "(?:`[[:alpha:]_][[:word:]$]*)\\b",
                     "name": "variable.other.constant.va.definition strong.va.definition"
                 }
             ]
