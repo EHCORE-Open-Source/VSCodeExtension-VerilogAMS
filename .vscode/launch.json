@@ -11,7 +11,7 @@
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"C:\\Users\\Ephoton\\OneDrive\\code\\hdl\\verilogA"
+				"D:\\git\\vaLib"
 			],
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"
