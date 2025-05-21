@@ -67,7 +67,10 @@
         "test": "vscode-test"
     },
     "dependencies": {
-        "@types/node": "^16.18.86",
-        "@types/vscode": "^1.87.0"
+        "@types/node": "^16.18.126",
+        "@types/vscode": "^1.88.0"
+    },
+    "devDependencies": {
+        "vscode": "^1.1.34"
     }
 }
