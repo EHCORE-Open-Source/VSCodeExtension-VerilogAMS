@@ -1,8 +1,8 @@
 {
     "name": "verilogams-support-package",
     "displayName": "Verilog-AMS Extension",
-    "description": "Verilog-A and Verilog-AMS support",
-    "version": "0.0.2",
+    "description": "Verilog-A and Verilog-AMS support with Jinja2 templates",
+    "version": "0.0.3",
     "publisher": "ephoton0210-taiwan",
     "activationEvents": [],
     "private": false,
@@ -39,6 +39,21 @@
                     ".va"
                 ],
                 "configuration": "./verilog-a.language-configuration.json"
+            },
+            {
+                "id": "verilog-a-jinja2",
+                "aliases": [
+                    "Verilog-A with Jinja2"
+                ],
+                "extensions": [
+                    ".va.jinja2",
+                    ".va.j2"
+                ],
+                "filenamePatterns": [
+                    "*.va.jinja2",
+                    "*.va.j2"
+                ],
+                "configuration": "./verilog-a.jinja2.language-configuration.json"
             }
         ],
         "grammars": [
@@ -55,6 +70,11 @@
             {
                 "scopeName": "source.verilog.analog.basic",
                 "path": "./syntaxes/verilog.analog/basic.tmLanguage.json"
+            },
+            {
+                "language": "verilog-a-jinja2",
+                "scopeName": "source.verilog.analog.jinja2",
+                "path": "./syntaxes/verilog-a.jinja2.tmLanguage.json"
             }
         ]
     },

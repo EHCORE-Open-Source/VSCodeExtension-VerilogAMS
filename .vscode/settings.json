@@ -1,3 +1,7 @@
 {
-	"editor.insertSpaces": false
+	"editor.insertSpaces": false,
+	"files.associations": {
+		"*.va.j2": "verilog-a-jinja2",
+		"*.va.jinja2": "verilog-a-jinja2"
+	}
 }

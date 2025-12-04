@@ -1,0 +1,29 @@
+.claude/**
+.vscode/**
+.vscode-test/**
+src/**
+.gitignore
+**/tsconfig.json
+**/.eslintrc.json
+**/*.map
+**/*.ts
+**/.vscode-test.*
+node_modules/**
+
+# Build and development scripts (should NOT be in extension)
+makeVSIX.bat
+makeVSIX.sh
+devEnvInstall.bat
+devEnvInstall.sh
+devEnvRemove.bat
+devEnvRemove.sh
+
+# Markdown documentation files
+*.md
+!README.md
+!CHANGELOG.md
+!LICENSE.md
+
+# Build artifacts
+dist/**
+*.vsix

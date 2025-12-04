@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a VSCode extension that provides language support for Verilog-A (`.va`) and Verilog-AMS (`.vams`) files, including syntax highlighting and document symbol navigation. The extension is published as `verilogams-support-package` by `ephoton0210-taiwan`.
+This is a VSCode extension (version 0.0.3) that provides language support for Verilog-A (`.va`), Verilog-AMS (`.vams`), and Verilog-A with Jinja2 templates (`.va.jinja2`, `.va.j2`) files, including syntax highlighting and document symbol navigation. The extension is published as `verilogams-support-package` by `ephoton0210-taiwan`.
+
+This project is licensed under GNU General Public License v3.0 (GPL-3.0-only).
 
 ## Development Commands
 
@@ -65,17 +67,35 @@ The symbol provider (`DocumentSymbolProvider` class) implements VSCode's outline
 - **Language configurations**:
   - [verilog-a.language-configuration.json](verilog-a.language-configuration.json) - Brackets, comments, auto-closing pairs for `.va` files
   - [verilog-ams.language-configuration.json](verilog-ams.language-configuration.json) - Configuration for `.vams` files
+  - [verilog-a.jinja2.language-configuration.json](verilog-a.jinja2.language-configuration.json) - Configuration for `.va.jinja2` and `.va.j2` template files
 
 - **TextMate Grammars** (in `syntaxes/`):
   - [verilog-a.tmLanguage.json](syntaxes/verilog-a.tmLanguage.json) - Syntax highlighting for Verilog-A (scope: `source.verilog.analog`)
   - [verilog-ams.tmLanguage.json](syntaxes/verilog-ams.tmLanguage.json) - Syntax highlighting for Verilog-AMS (scope: `source.verilog.analog.mixedsignal`)
   - [verilog.analog/basic.tmLanguage.json](syntaxes/verilog.analog/basic.tmLanguage.json) - Base analog grammar (scope: `source.verilog.analog.basic`)
+  - [verilog-a.jinja2.tmLanguage.json](syntaxes/verilog-a.jinja2.tmLanguage.json) - Composite grammar for Jinja2 templates with Verilog-A (scope: `source.verilog.analog.jinja2`)
 
 ### Extension Contributions
 Defined in [package.json](package.json):
-- Two language IDs: `verilog-ams` (.vams extension) and `verilog-a` (.va extension)
-- Three grammar scopes for hierarchical syntax highlighting
+- Three language IDs:
+  - `verilog-ams` (.vams extension)
+  - `verilog-a` (.va extension)
+  - `verilog-a-jinja2` (.va.jinja2, .va.j2 extensions) - for Jinja2 templates
+- Four grammar scopes for hierarchical syntax highlighting
 - VSCode engine compatibility: `^1.43.0`
+
+### Jinja2 Template Support
+The extension supports Verilog-A files with embedded Jinja2 template syntax:
+- **Jinja2 blocks**: `{% if %} ... {% endif %}`, `{% for %} ... {% endfor %}`
+- **Jinja2 variables**: `{{ variable_name }}`
+- **Jinja2 comments**: `{# comment #}`
+- VerilogA syntax is preserved and highlighted outside Jinja2 constructs
+- Use `.va.jinja2` or `.va.j2` extensions for automatic language detection
+
+**Handling Extension Conflicts**: If you have other Jinja2 extensions installed (e.g., `samuelcolvin.jinjahtml`), they may also register `.j2` files. To ensure `.va.j2` files are correctly recognized:
+1. The workspace settings in [.vscode/settings.json](.vscode/settings.json) explicitly maps both `.va.jinja2` and `.va.j2` to this extension
+2. The `filenamePatterns` in package.json prioritize the more specific `*.va.j2` pattern
+3. When both extensions are present, the workspace settings take precedence
 
 ## Known Issues
 

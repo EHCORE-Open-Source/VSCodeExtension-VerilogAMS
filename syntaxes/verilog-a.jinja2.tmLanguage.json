@@ -1,0 +1,90 @@
+{
+    "name": "Verilog-A with Jinja2",
+    "scopeName": "source.verilog.analog.jinja2",
+    "patterns": [
+        {
+            "include": "#jinja2-block"
+        },
+        {
+            "include": "#jinja2-variable"
+        },
+        {
+            "include": "#jinja2-comment"
+        },
+        {
+            "include": "source.verilog.analog"
+        }
+    ],
+    "repository": {
+        "jinja2-block": {
+            "name": "meta.embedded.block.jinja2",
+            "begin": "({%)",
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.definition.template.begin.jinja2"
+                }
+            },
+            "end": "(%})",
+            "endCaptures": {
+                "1": {
+                    "name": "punctuation.definition.template.end.jinja2"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#jinja2-keywords"
+                },
+                {
+                    "include": "#jinja2-operators"
+                }
+            ]
+        },
+        "jinja2-variable": {
+            "name": "meta.embedded.variable.jinja2",
+            "begin": "({{)",
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.definition.variable.begin.jinja2"
+                }
+            },
+            "end": "(}})",
+            "endCaptures": {
+                "1": {
+                    "name": "punctuation.definition.variable.end.jinja2"
+                }
+            },
+            "patterns": [
+                {
+                    "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                    "name": "variable.other.jinja2"
+                },
+                {
+                    "include": "#jinja2-operators"
+                }
+            ]
+        },
+        "jinja2-comment": {
+            "name": "comment.block.jinja2",
+            "begin": "({#)",
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.definition.comment.begin.jinja2"
+                }
+            },
+            "end": "(#})",
+            "endCaptures": {
+                "1": {
+                    "name": "punctuation.definition.comment.end.jinja2"
+                }
+            }
+        },
+        "jinja2-keywords": {
+            "match": "\\b(if|else|elif|endif|for|endfor|block|endblock|extends|include|import|from|macro|endmacro|call|endcall|filter|endfilter|set|raw|endraw)\\b",
+            "name": "keyword.control.jinja2"
+        },
+        "jinja2-operators": {
+            "match": "(==|!=|<=|>=|<|>|\\+|-|\\*|/|%|and|or|not|in|is)",
+            "name": "keyword.operator.jinja2"
+        }
+    }
+}

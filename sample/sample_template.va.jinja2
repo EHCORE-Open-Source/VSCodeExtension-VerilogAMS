@@ -1,0 +1,48 @@
+{# Jinja2 Template for Verilog-A Module Generation #}
+`include "disciplines.vams"
+`include "constants.vams"
+
+module {{ module_name }} ({% for port in ports %}{{ port }}{% if not loop.last %}, {% endif %}{% endfor %});
+    {# Port declarations #}
+    {% for port in input_ports %}
+    input {{ port }};
+    {% endfor %}
+    {% for port in output_ports %}
+    output {{ port }};
+    {% endfor %}
+
+    {# Electrical declarations #}
+    {% for port in ports %}
+    electrical {{ port }};
+    {% endfor %}
+
+    {# Parameters #}
+    {% if parameters %}
+    {% for param_name, param_value in parameters.items() %}
+    parameter real {{ param_name }} = {{ param_value }};
+    {% endfor %}
+    {% endif %}
+
+    {# Variables #}
+    real v_out;
+    integer i;
+
+    analog begin
+        {% if use_initial_step %}
+        @(initial_step) begin
+            v_out = 0.0;
+        end
+        {% endif %}
+
+        {% for equation in equations %}
+        {{ equation }}
+        {% endfor %}
+
+        {# Transfer function #}
+        {% if transfer_type == "voltage" %}
+        V({{ output_ports[0] }}) <+ v_out;
+        {% elif transfer_type == "current" %}
+        I({{ output_ports[0] }}) <+ v_out / {{ resistance }};
+        {% endif %}
+    end
+endmodule

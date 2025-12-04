@@ -1,0 +1,30 @@
+// {{ device_name }} - Resistor Model
+`include "disciplines.vams"
+
+module {{ module_name }} (p, n);
+    inout p, n;
+    electrical p, n;
+
+    {% if has_temperature_coeff %}
+    parameter real R = {{ resistance }} from (0:inf);
+    parameter real TC1 = {{ tc1 }} from [-inf:inf];
+    parameter real TC2 = {{ tc2 }} from [-inf:inf];
+    parameter real TNOM = {{ tnom }} from [-273.15:inf];
+    {% else %}
+    parameter real R = {{ resistance }} from (0:inf);
+    {% endif %}
+
+    real Reff;
+    real dT;
+
+    analog begin
+        {% if has_temperature_coeff %}
+        dT = $temperature - TNOM;
+        Reff = R * (1 + TC1*dT + TC2*dT*dT);
+        {% else %}
+        Reff = R;
+        {% endif %}
+
+        V(p, n) <+ Reff * I(p, n);
+    end
+endmodule
