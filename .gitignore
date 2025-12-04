@@ -1,4 +1,18 @@
 # Ignore folder name
-node_modules
-out
-vsix
+node_modules/
+out/
+vsix/
+__pycache__/
+
+# Ignore compressed archiver
+*.zip
+*.rar
+*.tar
+*.gz
+*.tgz
+*.xz
+*.bzip
+*.7z
+
+# Ignore local Claude settings
+.claude/settings.local.json
